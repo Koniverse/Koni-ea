@@ -7,7 +7,7 @@ priority: P1
 points: 5
 sprint: sprint-2026-W31
 assignee: jindo9986
-commit: pending
+commit: 191cc09
 created: 2026-08-02
 updated: 2026-08-02
 version_shipped: 0.3.0
