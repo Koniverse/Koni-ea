@@ -134,3 +134,42 @@ rule to it is cargo-culting the ritual instead of the reason.
 - The test is `git log`: if the text has never been committed, it is a draft.
 - Once committed, the rule binds fully — corrections go in a new entry that
   references the original by ID.
+
+---
+
+## 5. A checker that reads documentation as data will read its examples as instructions
+
+**What happened (v0.3.0)**: The first run of `scripts/verify.sh` reported two broken
+links. Neither was a link. Both were fragments of a shell snippet *inside a fenced
+code block* in `docs/tests/STRATEGY.md` and a story file — the snippet that
+demonstrates how to extract markdown links. The extractor found its own worked
+example and tried to resolve it as a path.
+
+Fixed by stripping fenced blocks. It then failed **again**, on this very lesson:
+the same snippet quoted as an *inline* code span rather than a fenced block. One
+trap, two syntaxes, and the first fix only covered one of them.
+
+**Why**: A link extractor is a parser with no notion of context. Markdown fences are
+semantic to a human and invisible to `grep`. The trap is specific to documentation
+tooling and it is structural, not a coding slip: the more thoroughly a repository
+documents its own checks, the more example text there is for those checks to
+misread. A repo that documents nothing would never have hit this.
+
+The generalization is worth keeping: **any tool that treats prose as data must
+respect the prose's own quoting.** Fenced blocks in markdown, string literals in
+source, `<pre>` in HTML, quoted text in a config file. If your parser cannot tell
+"this is an example of X" from "this is an X", it will act on the example.
+
+**How to avoid**:
+- Strip **every** code syntax the format has, not the first one that fixes the
+  symptom. Markdown has two: fenced blocks and inline spans. Fixing one and shipping
+  is how a bug returns wearing different clothes.
+- Strip fenced blocks before extracting anything from markdown:
+  `awk '/^[[:space:]]*```/ { inblock = !inblock; next } !inblock'`
+- Test a documentation checker **against this repository's own documentation**
+  first. It is the most adversarial corpus available, because it is full of examples
+  of the exact patterns being matched.
+- When a check reports a failure that looks absurd, suspect the check before the
+  content. Both "broken links" here pointed at paths no human would ever write.
+
+See [US-1.4](sprints/stories/US-1.4-open-source-standard.md).

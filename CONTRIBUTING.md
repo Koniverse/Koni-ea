@@ -15,6 +15,24 @@ cp .active-context.example.md .active-context.md   # fill in your local details
 Read [REPO_STRUCTURE.md](REPO_STRUCTURE.md) first — it says where things go and
 why. Most rejected changes are things filed in the wrong place.
 
+By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Check your work before you open a PR
+
+One command, the same one CI runs:
+
+```bash
+./scripts/verify.sh
+```
+
+It checks English-only text, internal link resolution, template version identity,
+indicator-handle parity, closed-bar reads, committed binaries, and the
+VERSION/CHANGELOG pairing. A green run locally is a green run in CI.
+
+It does **not** check whether the MQL5 compiles — MetaEditor is Windows-only and
+there is no runner for it. That check is yours to run, and the PR template asks you
+to say which host you ran it on.
+
 ## What belongs here
 
 | Contribution | Where | Bar to clear |

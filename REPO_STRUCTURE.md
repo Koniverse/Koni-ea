@@ -24,6 +24,8 @@ koni-ea/
 │               ├── STARTER_EA_v1.00.md
 │               └── backtest/
 ├── docs/                       # koni-docs surface — see docs/README.md
+├── scripts/verify.sh           # every check CI runs; run it before a PR
+├── .github/                    # issue + PR templates, CODEOWNERS, CI workflow
 ├── .claude/skills/             # CONSUMED — toolchain for Claude Code (symlinks)
 ├── .agents/skills/             # CONSUMED — toolchain for Codex/Cursor/Gemini/Copilot
 ├── .koni-harness/              # vendored commit/release gate
@@ -31,11 +33,22 @@ koni-ea/
 ├── AGENTS.md                   # single source of truth for AI instructions
 ├── CLAUDE.md                   # thin pointer + Koni-Docs Integration block
 ├── CONTRIBUTING.md             # contribution rules + correctness checklist
+├── CODE_OF_CONDUCT.md          # Contributor Covenant 2.1 + trading-specific standards
+├── SECURITY.md                 # private disclosure + the threat model for this repo
+├── SUPPORT.md                  # where to ask, and what is out of scope
 ├── LICENSE                     # MIT
 ├── REPO_STRUCTURE.md           # this file
 ├── VERSION                     # bare semver, no `v` prefix
+├── .editorconfig               # MetaEditor uses 3-space + CRLF; general files use 2-space + LF
 └── skills-lock.json            # lockfile for externally-sourced skills
 ```
+
+## Language
+
+**English, everywhere.** Source, comments, documentation, issues, pull requests,
+commit messages. `./scripts/verify.sh` fails on non-English text in tracked files
+and CI runs the same script, so this is enforced rather than requested. See
+[CONTEXT D4](docs/CONTEXT.md) for why the one prior exception was removed.
 
 ## Owned vs consumed — the distinction that matters
 

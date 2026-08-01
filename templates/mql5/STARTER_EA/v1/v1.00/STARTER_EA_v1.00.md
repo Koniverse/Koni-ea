@@ -1,209 +1,209 @@
-# STARTER_EA v1.00 — Tài Liệu Thuật Toán
+# STARTER_EA v1.00 — Algorithm Document
 
 **File**: `STARTER_EA_v1.00.mq5`
-**Phiên bản**: v1.00
-**Ngôn ngữ**: MQL5
-**Ngày cập nhật**: 2026-08-02
+**Version**: v1.00
+**Language**: MQL5
+**Updated**: 2026-08-02
 
 > [!WARNING]
-> **Đây là template cấu trúc, không phải chiến lược.** Tín hiệu vào lệnh là một
-> EMA cross tầm thường, **không có lợi thế thống kê**, tồn tại chỉ để minh họa
-> chỗ logic của bạn cắm vào. Không chạy bản này trên tài khoản thật.
+> **This is a structural template, not a strategy.** The entry signal is a naive EMA
+> cross with **no statistical edge**. It exists only to show where your logic plugs
+> in. Do not run this version on a live account.
 
 ---
 
-## 1. Tổng quan chiến lược
+## 1. Strategy overview
 
-STARTER_EA là **bộ khung tham chiếu** cho EA MQL5 trên MetaTrader 5. Nó triển
-khai đầy đủ và đúng chuẩn mọi cơ chế *hạ tầng* mà một EA Koniverse phải có —
-vòng đời sự kiện, quản lý handle chỉ báo, chặn tín hiệu theo nến đóng, sizing
-theo % rủi ro, SL/TP tôn trọng stop level của sàn, các chốt an toàn (equity
-breaker, giới hạn lỗ ngày, cooldown), bộ lọc vận hành và khôi phục trạng thái
-sau restart.
+STARTER_EA is a **reference chassis** for an MQL5 Expert Advisor on MetaTrader 5. It
+implements every piece of *infrastructure* a Koniverse EA must have, correctly: the
+event lifecycle, indicator-handle management, a closed-bar signal gate, risk-percent
+sizing, SL/TP that respects the broker stop level, the safety cut-outs (equity
+breaker, daily loss limit, cooldown), operational filters, and state recovery after
+a restart.
 
-Phần **duy nhất** bạn cần viết lại là hàm `Signal()`. Mọi thứ còn lại là hạ tầng
-nên giữ nguyên.
+The **only** function you rewrite is `Signal()`. Everything else is infrastructure
+and should stay as it is.
 
-**Loại chiến lược**: trend-following (placeholder — thay bằng loại của bạn).
-**Phương pháp quản lý vốn**: rủi ro cố định theo % equity mỗi lệnh, một vị thế
-tại một thời điểm, không DCA, không martingale.
-
----
-
-## 2. Cải tiến so với phiên bản trước
-
-Không có — đây là `v1.00`, phiên bản đầu tiên.
+**Strategy type**: trend-following (placeholder — replace with your own).
+**Money management**: fixed risk percent of equity per trade, one position at a
+time, no DCA, no martingale.
 
 ---
 
-## 3. Tham số đầu vào
+## 2. Version improvements
 
-### ==== General ====
-
-| Input | Mặc Định | Kiểu | Mô tả |
-|---|---|---|---|
-| `InpMagicNumber` | `990001` | `long` | Định danh instance. **Bắt buộc > 0 và duy nhất cho từng instance đang chạy.** MT5 không tự kiểm tra trùng — hai EA chung magic sẽ quản lý lệnh của nhau. |
-| `InpTradeComment` | `STARTER_EA` | `string` | Tiền tố comment gắn vào lệnh, dùng để truy vết trên Journal. |
-
-### ==== Signal (thay thế phần này) ====
-
-| Input | Mặc Định | Kiểu | Mô tả |
-|---|---|---|---|
-| `InpFastPeriod` | `12` | `int` | Chu kỳ EMA nhanh của tín hiệu placeholder. |
-| `InpSlowPeriod` | `26` | `int` | Chu kỳ EMA chậm của tín hiệu placeholder. Bắt buộc lớn hơn `InpFastPeriod`. |
-
-### ==== Position Sizing ====
-
-| Input | Mặc Định | Kiểu | Mô tả |
-|---|---|---|---|
-| `InpUseRiskPercent` | `true` | `bool` | `true` = tính lot theo % equity; `false` = dùng lot cố định. |
-| `InpRiskPercent` | `1.0` | `double` | `[InpUseRiskPercent=true]` Rủi ro mỗi lệnh, tính theo % equity. |
-| `InpFixedLot` | `0.01` | `double` | `[InpUseRiskPercent=false]` Khối lượng cố định mỗi lệnh. |
-
-### ==== Stop Loss / Take Profit ====
-
-| Input | Mặc Định | Kiểu | Mô tả |
-|---|---|---|---|
-| `InpAtrPeriod` | `14` | `int` | Chu kỳ ATR dùng để tính khoảng cách SL. |
-| `InpAtrSLMult` | `2.0` | `double` | Khoảng cách SL = `ATR * hệ số này`. |
-| `InpRR` | `1.5` | `double` | Khoảng cách TP = `khoảng cách SL * hệ số này` (tỷ lệ reward:risk). |
-
-### ==== Risk Management ====
-
-| Input | Mặc Định | Kiểu | Mô tả |
-|---|---|---|---|
-| `InpMaxPositions` | `1` | `int` | Số vị thế đồng thời tối đa của magic này. |
-| `InpEquityBreakerPct` | `20.0` | `double` | Chốt dừng khi drawdown từ đỉnh equity chạm ngưỡng này. **Có latch** — không tự mở lại. |
-| `InpResetBreaker` | `false` | `bool` | Đặt `true` **một lần** để gỡ latch thủ công, sau đó trả về `false`. |
-| `InpDailyLossLimitPct` | `5.0` | `double` | Ngừng vào lệnh mới khi lỗ trong ngày chạm ngưỡng. `0` = tắt. |
-| `InpCooldownBars` | `3` | `int` | Số nến chờ sau một lệnh bị quét SL. `0` = tắt. |
-
-### ==== Operational Filters ====
-
-| Input | Mặc Định | Kiểu | Mô tả |
-|---|---|---|---|
-| `InpMaxSpreadPoints` | `30` | `int` | Bỏ qua vào lệnh khi spread vượt ngưỡng. `0` = tắt. |
-| `InpMaxGapPoints` | `200` | `int` | Bỏ qua vào lệnh khi nến mở có gap lớn hơn ngưỡng. `0` = tắt. |
-| `InpUseSessionFilter` | `false` | `bool` | Bật giới hạn khung giờ giao dịch. |
-| `InpSessionStartHourUtc` | `7` | `int` | `[InpUseSessionFilter=true]` Giờ bắt đầu phiên, **theo UTC**. |
-| `InpSessionEndHourUtc` | `20` | `int` | `[InpUseSessionFilter=true]` Giờ kết thúc phiên, **theo UTC**. Nhỏ hơn giờ bắt đầu thì cửa sổ vắt qua nửa đêm. |
-
-### ==== Execution ====
-
-| Input | Mặc Định | Kiểu | Mô tả |
-|---|---|---|---|
-| `InpSlippagePoints` | `10` | `int` | Độ trượt giá tối đa chấp nhận, tính bằng point. |
-
-> Bảng này và file `.set` phải luôn khớp nhau. Sửa một bên thì sửa cả bên kia.
+None — `v1.00` is the first version.
 
 ---
 
-## 4. Chi tiết thuật toán
+## 3. Input parameters
 
-### Kích hoạt: theo nến, không theo tick
+### General
 
-Quản lý rủi ro chạy **mỗi tick**; quyết định vào lệnh chỉ chạy **một lần mỗi nến
-đóng**. Tín hiệu đọc từ nến `[1]` và `[2]` — **không bao giờ đọc `[0]`**, vì nến
-đang hình thành sẽ vẽ lại và backtest sẽ không cho bạn thấy thiệt hại đó.
+| Input | Default | Type | Description |
+|---|---|---|---|
+| `InpMagicNumber` | `990001` | `long` | Instance identifier. **Must be > 0 and unique per running instance.** MT5 does not enforce uniqueness — two EAs sharing a magic will manage each other's positions. |
+| `InpTradeComment` | `STARTER_EA` | `string` | Comment prefix attached to orders, for tracing in the Journal. |
 
-### Luồng OnTick
+### Signal (replace this section)
+
+| Input | Default | Type | Description |
+|---|---|---|---|
+| `InpFastPeriod` | `12` | `int` | Fast EMA period for the placeholder signal. |
+| `InpSlowPeriod` | `26` | `int` | Slow EMA period for the placeholder signal. Must exceed `InpFastPeriod`. |
+
+### Position sizing
+
+| Input | Default | Type | Description |
+|---|---|---|---|
+| `InpUseRiskPercent` | `true` | `bool` | `true` sizes by percent of equity; `false` uses a fixed lot. |
+| `InpRiskPercent` | `1.0` | `double` | `[InpUseRiskPercent=true]` Risk per trade, as a percent of equity. |
+| `InpFixedLot` | `0.01` | `double` | `[InpUseRiskPercent=false]` Fixed volume per trade. |
+
+### Stop loss / take profit
+
+| Input | Default | Type | Description |
+|---|---|---|---|
+| `InpAtrPeriod` | `14` | `int` | ATR period used to compute the SL distance. |
+| `InpAtrSLMult` | `2.0` | `double` | SL distance = `ATR * this multiplier`. |
+| `InpRR` | `1.5` | `double` | TP distance = `SL distance * this` (reward-to-risk ratio). |
+
+### Risk management
+
+| Input | Default | Type | Description |
+|---|---|---|---|
+| `InpMaxPositions` | `1` | `int` | Maximum concurrent positions for this magic. |
+| `InpEquityBreakerPct` | `20.0` | `double` | Halt when drawdown from the equity peak reaches this percent. **Latched** — it does not clear itself. |
+| `InpResetBreaker` | `false` | `bool` | Set `true` **once** to clear a latched halt, then set it back to `false`. |
+| `InpDailyLossLimitPct` | `5.0` | `double` | Stop opening new positions once the day's loss reaches this percent. `0` disables. |
+| `InpCooldownBars` | `3` | `int` | Bars to wait after a stop-out. `0` disables. |
+
+### Operational filters
+
+| Input | Default | Type | Description |
+|---|---|---|---|
+| `InpMaxSpreadPoints` | `30` | `int` | Skip entry when the spread exceeds this. `0` disables. |
+| `InpMaxGapPoints` | `200` | `int` | Skip entry when the bar opens with a gap larger than this. `0` disables. |
+| `InpUseSessionFilter` | `false` | `bool` | Restrict trading to an hour window. |
+| `InpSessionStartHourUtc` | `7` | `int` | `[InpUseSessionFilter=true]` Session start hour, **UTC**. |
+| `InpSessionEndHourUtc` | `20` | `int` | `[InpUseSessionFilter=true]` Session end hour, **UTC**. A value below the start hour wraps the window past midnight. |
+
+### Execution
+
+| Input | Default | Type | Description |
+|---|---|---|---|
+| `InpSlippagePoints` | `10` | `int` | Maximum price deviation accepted, in points. |
+
+> This table and the `.set` file must always agree. Change one, change the other.
+
+---
+
+## 4. Algorithm detail
+
+### Trigger: per bar, not per tick
+
+Risk management runs on **every tick**. The entry decision runs **once per closed
+bar**. Signals read bars `[1]` and `[2]` — **never `[0]`**, because the forming bar
+repaints and a backtest will not show you the damage.
+
+### OnTick flow
 
 ```
 OnTick
- ├─ UpdateEquityPeakAndBreaker()        ← mỗi tick
+ ├─ UpdateEquityPeakAndBreaker()        ← every tick
  ├─ bar = iTime(...,0)
- ├─ nếu bar == g_lastBarTime → return   ← chưa sang nến mới
- ├─ đọc fast[1] fast[2] slow[1] slow[2] atr[1]
- │    └─ đọc hụt → return (CHƯA commit bar, thử lại tick sau)
- ├─ g_lastBarTime = bar                 ← commit sau khi mọi lần đọc thành công
+ ├─ if bar == g_lastBarTime → return    ← not a new bar yet
+ ├─ read fast[1] fast[2] slow[1] slow[2] atr[1]
+ │    └─ short read → return (bar NOT committed, retry next tick)
+ ├─ g_lastBarTime = bar                 ← commit only after every read succeeded
  ├─ RollDailyAnchorIfNeeded()
- ├─ cổng chặn: halt → số vị thế → cooldown → lỗ ngày → bộ lọc vận hành
- ├─ signal = Signal(...)                ← >>> PHẦN BẠN THAY THẾ <<<
+ ├─ gates: halt → position count → cooldown → daily loss → operational filters
+ ├─ signal = Signal(...)                ← >>> THE PART YOU REPLACE <<<
  └─ signal != 0 → OpenTrade(signal, atr)
 ```
 
-Điểm tinh tế đáng chú ý: `g_lastBarTime` chỉ được commit **sau khi** toàn bộ
-`CopyBuffer` thành công. Nếu commit trước, một lần đọc hụt tạm thời sẽ "đốt" mất
-nến đó và tín hiệu bị bỏ qua vĩnh viễn trên nến ấy.
+One detail deserves attention: `g_lastBarTime` is committed only **after** every
+`CopyBuffer` succeeds. Committing first would let a transient short read burn the
+bar, and the signal would be skipped on that bar forever.
 
-### Công thức SL/TP
+### SL/TP formulas
 
 ```
 minStop = SYMBOL_TRADE_STOPS_LEVEL * _Point
 slDist  = max(ATR[1] * InpAtrSLMult, minStop + 3 * _Point)
 tpDist  = slDist * InpRR
 
-Lệnh BUY  (khớp tại ASK):  SL = ask - slDist   TP = ask + tpDist
-Lệnh SELL (khớp tại BID):  SL = bid + slDist   TP = bid - tpDist
+BUY  (fills at ASK):  SL = ask - slDist   TP = ask + tpDist
+SELL (fills at BID):  SL = bid + slDist   TP = bid - tpDist
 ```
 
-SL được **hard-code vào lệnh** ngay khi gửi — không phụ thuộc EA còn sống hay
-không. Mỗi chiều đặt stop dựa trên chính giá nó khớp; trộn ask/bid sẽ làm lệch
-mọi stop đi nửa spread.
+The stop loss is **written into the order** when it is sent, so it survives whether
+or not the EA is running. Each side bases its stops on the price it actually fills
+at; mixing ask and bid shifts every stop by half the spread.
 
-### Công thức khối lượng
+### Sizing formula
 
 ```
 risk = equity * InpRiskPercent / 100
 lot  = risk / (slDist / tickSize * tickValue)
 
-nếu lot < SYMBOL_VOLUME_MIN → BỎ QUA lệnh (trả về 0.0)
-ngược lại → làm tròn XUỐNG theo SYMBOL_VOLUME_STEP, kẹp trong [MIN, MAX]
+if lot < SYMBOL_VOLUME_MIN → SKIP the trade (return 0.0)
+otherwise → round DOWN to SYMBOL_VOLUME_STEP, clamp to [MIN, MAX]
 ```
 
-Việc bỏ qua khi dưới lot tối thiểu xảy ra **trước** khi chuẩn hóa. Nếu kẹp lên
-`VOLUME_MIN`, lệnh vẫn vào nhưng rủi ro thực đã vượt mức người dùng cấu hình —
-và không ai biết.
+The sub-minimum skip happens **before** normalization. Clamping up to `VOLUME_MIN`
+would still open the trade, but the real risk would exceed what the user
+configured — and nobody would know.
 
 ---
 
-## 5. Mô tả kỹ thuật
+## 5. Technical description
 
-**Biến toàn cục trạng thái**
+**Global state**
 
-| Biến | Vai trò | Bền vững qua restart |
+| Variable | Role | Survives restart |
 |---|---|---|
-| `g_lastBarTime` | Cổng chặn nến mới | Không (tự dựng lại từ nến kế tiếp) |
-| `g_equityPeak` | Đỉnh equity, chỉ tăng | Có — GlobalVariable |
-| `g_halt` | Latch của equity breaker | Có — GlobalVariable |
-| `g_dayStartEquity` | Mốc equity đầu ngày | Có — GlobalVariable |
-| `g_dayAnchorDate` | Ngày mà mốc trên thuộc về | Có — GlobalVariable |
-| `g_cooldownUntil` | Thời điểm hết cooldown | Không (mất khi restart, chấp nhận được) |
+| `g_lastBarTime` | New-bar gate | No (rebuilds on the next bar) |
+| `g_equityPeak` | Equity peak, ratchets up only | Yes — GlobalVariable |
+| `g_halt` | Equity breaker latch | Yes — GlobalVariable |
+| `g_dayStartEquity` | Daily loss anchor | Yes — GlobalVariable |
+| `g_dayAnchorDate` | The day that anchor belongs to | Yes — GlobalVariable |
+| `g_cooldownUntil` | Cooldown expiry | No (lost on restart, acceptable) |
 
-Khóa GlobalVariable có tiền tố `STARTER_<magic>_<symbol>_<period>` nên nhiều
-instance trên cùng terminal không giẫm lên nhau.
+GlobalVariable keys are prefixed `STARTER_<magic>_<symbol>_<period>`, so multiple
+instances on one terminal do not overwrite each other.
 
-**Handle chỉ báo**: `g_fastHandle`, `g_slowHandle`, `g_atrHandle` — tạo trong
-`OnInit`, kiểm tra từng cái với `INVALID_HANDLE`, giải phóng có bảo vệ trong
-`OnDeinit` và gán lại `INVALID_HANDLE`. Handle không giải phóng sẽ sống sót qua
-recompile và rò rỉ.
+**Indicator handles**: `g_fastHandle`, `g_slowHandle`, `g_atrHandle` — created in
+`OnInit`, each checked against `INVALID_HANDLE`, released in `OnDeinit` under a
+guard and reset to `INVALID_HANDLE`. An unreleased handle survives a recompile and
+leaks.
 
 ---
 
-## 6. Cấu hình khuyến nghị
+## 6. Recommended configuration
 
-| Mục | Giá trị |
+| Item | Value |
 |---|---|
-| Symbol | Cặp có spread thấp (EURUSD, XAUUSD) |
-| Khung thời gian | M15 |
-| Loại tài khoản | Hedging hoặc Netting đều chạy được |
-| Múi giờ | Bộ lọc phiên tính theo **UTC**, không theo giờ server |
+| Symbol | A low-spread pair (EURUSD, XAUUSD) |
+| Timeframe | M15 |
+| Account type | Hedging or netting both work |
+| Timezone | The session filter uses **UTC**, not server time |
 
-Đây là cấu hình để *chạy thử bộ khung*, không phải cấu hình sinh lời.
+This configuration exists to exercise the chassis. It is not a profitable setup.
 
 ---
 
-## 7. Ghi chú rủi ro & backtest
+## 7. Risk and backtest notes
 
 > [!WARNING]
-> Tín hiệu placeholder là EMA cross — một trong những tín hiệu bị whipsaw nặng
-> nhất khi thị trường đi ngang. Kết quả backtest của bản `v1.00` này **không nói
-> lên điều gì** về chiến lược của bạn.
+> The placeholder signal is an EMA cross, one of the signals most punished by
+> whipsaw in a ranging market. Backtest results for `v1.00` **say nothing** about
+> your strategy.
 
-**Chế độ backtest bắt buộc khi phát hành**: "Every Tick Based on Real Ticks",
-tối thiểu 3 tháng, đúng khung thời gian sẽ chạy live. Chế độ "Open Prices Only"
-thổi phồng tỷ lệ thắng 10–15% vì thứ tự chạm SL/TP trong nến bị giả lập — chỉ
-dùng nó để lặp nhanh khi đang phát triển.
+**Required backtest mode for a release**: "Every Tick Based on Real Ticks", at least
+3 months, on the timeframe the EA will actually run. "Open Prices Only" overstates
+win rate by 10–15% because intra-bar SL/TP ordering is faked — use it to iterate
+quickly, never to decide.
 
-Bản `v1.00` **chưa có** backtest phát hành. Thư mục `backtest/` còn trống có
-chủ đích: nó sẽ được điền khi bạn cắt phiên bản đầu tiên của *chiến lược bạn*.
+Version `v1.00` has **no release backtest**. The `backtest/` directory is empty on
+purpose: it gets filled when you cut the first version of *your* strategy.

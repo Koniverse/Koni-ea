@@ -135,3 +135,53 @@ would have caught them either.
 **Date**: 2026-08-02
 **Version**: 0.2.0
 **Reference**: [docs/tests/STRATEGY.md](tests/STRATEGY.md), [findings.md](tests/findings.md), [D2](#d2-the-repo-goes-public--scope-narrows-to-mql5-and-the-toolchain-leaves-git).
+
+---
+
+### D4. English everywhere, enforced — the Vietnamese carve-out does not survive going public
+
+**Context**: The `koni-ea-ops` standard specified that a released EA's per-version
+document be written in **Vietnamese**, reasoning that the document is operational
+rather than code. `STARTER_EA_v1.00.md` was written to that rule. The reasoning held
+while the standard lived in a private repo read by one team.
+
+It stopped holding the moment this repo became a public product. `koni-ea-ops` is
+itself one of the two skills this repo *publishes*: a partner in Jakarta or Warsaw
+runs `npx skills add Koniverse/koni-ea --skill koni-ea-ops`, and the standard they
+install instructs them to write documentation in a language they may not read, to a
+rule they never agreed to. The template shipped beside it had the same problem —
+the one file a new user reads to understand what they just copied was unreadable to
+most of the audience.
+
+**Decision**: English everywhere, with no exception. Translate
+`STARTER_EA_v1.00.md`; rewrite the language mandate in
+`skills/koni-ea-ops/references/documentation.md` and its prescribed section names;
+remove the carve-out from `AGENTS.md`. A team working in one language may keep a
+translation alongside the English original, but the **shipped artifact is English**.
+
+Enforce it rather than request it: `scripts/verify.sh` fails on Vietnamese
+diacritics and CJK in any tracked file, and CI runs that same script.
+
+**Rationale**: A language rule that is only written down drifts within one release —
+the next contributor writes what feels natural and nobody notices until a partner
+files an issue they cannot phrase. The alternatives were worse. *Keep the carve-out
+and translate only the template* — leaves the published standard telling every
+downstream user to do the thing this repo just stopped doing. *Ship both languages* —
+doubles every per-version document and guarantees the two drift, with no rule for
+which wins. *Ask contributors politely* — the exact class of rule that a mechanical
+check exists for.
+
+The check keys on Vietnamese diacritics and CJK ranges rather than on all non-ASCII,
+because em dashes and typographic quotes are legitimate English typography and this
+repository uses them throughout.
+
+**Impact**: `templates/mql5/STARTER_EA/v1/v1.00/STARTER_EA_v1.00.md` translated;
+`skills/koni-ea-ops/references/documentation.md` mandate and section names rewritten
+— **this changes what downstream consumers of the skill are told to do**;
+`AGENTS.md`, `REPO_STRUCTURE.md`, `README.md` updated. New `scripts/verify.sh` and
+`.github/workflows/verify.yml` enforce it. Existing Vietnamese EA documents in other
+Koniverse repos are not retroactively translated — this decision binds new work.
+
+**Date**: 2026-08-02
+**Version**: 0.3.0
+**Reference**: [D2](#d2-the-repo-goes-public--scope-narrows-to-mql5-and-the-toolchain-leaves-git), `skills/koni-ea-ops/references/documentation.md`, [scripts/verify.sh](../scripts/verify.sh).

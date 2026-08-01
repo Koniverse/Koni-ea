@@ -11,15 +11,16 @@ goal: >-
 
 ## Sprint scope
 
-| US     | Title                                                            | Epic   | Pri | Points | Status | Ship   | Story file                                                                         |
-| ------ | ---------------------------------------------------------------- | ------ | --- | ------ | ------ | ------ | ---------------------------------------------------------------------------------- |
-| US-1.1 | Bootstrap the repo to the Koniverse standard                     | EPIC-1 | P1  | 3      | ✅ done | v0.1.0 | [stories/US-1.1-repo-bootstrap.md](stories/US-1.1-repo-bootstrap.md)               |
-| US-1.2 | Relocate koni-ea-dev + koni-ea-ops from Koni-Skills              | EPIC-1 | P1  | 3      | ✅ done | v0.1.0 | [stories/US-1.2-relocate-ea-skills.md](stories/US-1.2-relocate-ea-skills.md)       |
-| US-1.3 | Format for public release — template, license, agent entry point | EPIC-1 | P1  | 8      | ✅ done | v0.2.0 | [stories/US-1.3-public-release-format.md](stories/US-1.3-public-release-format.md) |
+| US     | Title                                                                          | Epic   | Pri | Points | Status | Ship   | Story file                                                                         |
+| ------ | ------------------------------------------------------------------------------ | ------ | --- | ------ | ------ | ------ | ---------------------------------------------------------------------------------- |
+| US-1.1 | Bootstrap the repo to the Koniverse standard                                   | EPIC-1 | P1  | 3      | ✅ done | v0.1.0 | [stories/US-1.1-repo-bootstrap.md](stories/US-1.1-repo-bootstrap.md)               |
+| US-1.2 | Relocate koni-ea-dev + koni-ea-ops from Koni-Skills                            | EPIC-1 | P1  | 3      | ✅ done | v0.1.0 | [stories/US-1.2-relocate-ea-skills.md](stories/US-1.2-relocate-ea-skills.md)       |
+| US-1.3 | Format for public release — template, license, agent entry point               | EPIC-1 | P1  | 8      | ✅ done | v0.2.0 | [stories/US-1.3-public-release-format.md](stories/US-1.3-public-release-format.md) |
+| US-1.4 | Meet the open-source standard — community health files, CI, English everywhere | EPIC-1 | P1  | 5      | ✅ done | v0.3.0 | [stories/US-1.4-open-source-standard.md](stories/US-1.4-open-source-standard.md)   |
 
-**Committed**: 14 points across 3 stories, all under [EPIC-1](epics/EPIC-1.md).
-**Delivered**: 14 points, 3 stories. Shipped `0.1.0` (bootstrap) and `0.2.0`
-(public release).
+**Committed**: 19 points across 4 stories, all under [EPIC-1](epics/EPIC-1.md).
+**Delivered**: 19 points, 4 stories. Shipped `0.1.0` (bootstrap), `0.2.0`
+(public release) and `0.3.0` (open-source standard).
 
 ## Sprint note
 

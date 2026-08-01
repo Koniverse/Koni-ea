@@ -75,6 +75,13 @@ the `.mq5` are three views of one thing. Change one, change all three.
 
 ### Step 5 — verify before claiming done
 
+```bash
+./scripts/verify.sh
+```
+
+That covers English-only text, link resolution, version identity, handle parity,
+closed-bar reads, and the VERSION/CHANGELOG pairing. Then, by hand:
+
 - Compile in MetaEditor: **zero errors and zero warnings**
 - Walk [`references/mql5-pitfalls.md`](skills/koni-ea-dev/references/mql5-pitfalls.md)
   as a checklist
@@ -105,10 +112,13 @@ backtest hides. Full reasoning:
 | Margin **pre**-check, never post-check | A pending order's `DONE` retcode says nothing about whether the fill is affordable |
 | One `MagicNumber` per instance, `> 0`, never reused | MT5 does not enforce it — two EAs silently manage each other's positions |
 | Rebuild state after restart | A recompile wipes memory while positions stay open |
-| English for code, identifiers, comments, commits | Mixed-language code in a public repo |
+| English everywhere — code, comments, docs, commits | A contributor who cannot read half the repository |
 
-One documentation exception to the English rule: the per-version EA `.md` is
-written in **Vietnamese**, per the koni-ea-ops standard. Code stays English.
+**English has no exceptions here.** Every file in this repository is English:
+source, comments, documentation, issue and PR text, commit messages. An earlier
+revision carved out the per-version EA document as Vietnamese; that carve-out is
+gone ([CONTEXT D4](docs/CONTEXT.md)). `./scripts/verify.sh` and CI both fail on
+non-English text in tracked files, so this is enforced rather than requested.
 
 ---
 

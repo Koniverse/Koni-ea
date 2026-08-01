@@ -13,12 +13,56 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ## [Unreleased]
 
+(empty — track here while in dev but not yet shipped)
+
+---
+
+## [0.3.0] — 2026-08-02 — open-source standard: community health files, CI, English everywhere — v0.3.0
+
+Brings the repository up to what a contributor expects from a credible open-source
+project, and removes the last non-English content
+([US-1.4](sprints/stories/US-1.4-open-source-standard.md), [D4](CONTEXT.md)).
+
+### Added
+- **Community health files** — `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1, plus
+  two trading-specific standards: no profitability claims, no soliciting funds or
+  account access), `SECURITY.md` (a threat model for a repo that ships trading code
+  rather than a service — malicious template logic, hidden order routing, skill
+  prompt injection, and the grey area where a correctness bug costs money), and
+  `SUPPORT.md`.
+- **`.github/`** — issue templates for bugs and features, a pull request template
+  carrying the full correctness checklist, `CODEOWNERS`, and `workflows/verify.yml`.
+- **`scripts/verify.sh`** — one command that runs every automatable check:
+  English-only text, internal link resolution, template version identity,
+  indicator-handle create/release parity, closed-bar reads, committed binaries, and
+  the VERSION/CHANGELOG pairing. CI calls the same script, so a green local run is a
+  green CI run.
+- **`.editorconfig`** — MetaEditor's 3-space/CRLF convention for `.mq5` and `.set`,
+  2-space/LF elsewhere.
+
+### Changed
+- **English everywhere, enforced.** `STARTER_EA_v1.00.md` translated;
+  `skills/koni-ea-ops/references/documentation.md` rewritten to mandate English,
+  including its prescribed section names. **This changes what downstream consumers
+  of the skill are told to do** — the prior revision preferred Vietnamese, which
+  cannot survive a standard being published to partners who do not read it.
+- README, CONTRIBUTING, AGENTS.md and REPO_STRUCTURE.md updated for the new files
+  and the language rule.
+
 ### Fixed
 - **The `tests` pre-push gate is disabled** ([D3](CONTEXT.md)). The vendored default
   runs `npm test`, which assumes a code profile; this is a content repo with no
   `package.json`, so every push failed with `ENOENT`. Commented out with the reason
   in place rather than deleted — a gate that fails on every push trains people to
   reach for `--no-verify`, which disables credential scanning too.
+- **[F-4](tests/findings.md) closed** — link checking is now automated. It found two
+  real defects on its first run: `sed` snippets inside fenced code blocks being
+  parsed as markdown links.
+
+### Known gaps
+- The template still has never been compiled, run, or backtested
+  ([F-1 → F-3](tests/findings.md)). CI deliberately does not fake this — MetaEditor
+  is Windows-only, and both the workflow and `verify.sh` say so in place.
 
 ---
 

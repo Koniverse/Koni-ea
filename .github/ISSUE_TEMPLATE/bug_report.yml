@@ -1,0 +1,98 @@
+name: Bug report
+description: Something in this repository is wrong — a broken template, an incorrect instruction, a dead link.
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this.
+
+        **Security problems do not belong here.** If the bug lets someone lose money
+        or expose credentials, report it privately — see
+        [SECURITY.md](https://github.com/Koniverse/koni-ea/blob/main/SECURITY.md).
+
+        **Strategy performance is not a bug.** The shipped templates are structural
+        skeletons with deliberately naive signals and no edge. That is documented and
+        expected.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before you file
+      options:
+        - label: This is not a security issue (those go through SECURITY.md, privately)
+          required: true
+        - label: I have removed my account number, password, and broker credentials from everything I pasted below
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: What is broken?
+      options:
+        - A template (MQL5 source, .set, or its docs)
+        - A skill (koni-ea-dev / koni-ea-ops)
+        - Documentation (README, SETUP, CONTRIBUTING, a dead link)
+        - Repository tooling (the gate, CI, the doc CLI)
+        - Something else
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Repository version
+      description: The contents of the VERSION file, or the commit SHA you are on.
+      placeholder: "0.3.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+      description: Paste output as text, not a screenshot — text is searchable and quotable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Copy templates/mql5/STARTER_EA to ...
+        2. Compile in MetaEditor build ...
+        3. Attach to EURUSD M15 ...
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Only if the bug involves MetaTrader. Skip for docs and tooling issues.
+      value: |
+        - MT5 build:
+        - Broker:
+        - Symbol / timeframe:
+        - Account type: demo / live
+        - OS:
+    validations:
+      required: false
+
+  - type: textarea
+    id: journal
+    attributes:
+      label: Journal / Experts output
+      description: The relevant lines. The template logs every block with a `[TAG]` prefix — those lines are usually the answer.
+      render: text
+    validations:
+      required: false

@@ -80,28 +80,32 @@ per-version doc that it is a mechanical check rather than a performance claim.
 
 ---
 
+## Closed
+
 ### F-4 — No automated link checking
 
 | | |
 |---|---|
 | **Severity** | Low |
 | **Opened** | 2026-08-02 (v0.2.0) |
+| **Closed** | 2026-08-02 (v0.3.0) |
 | **Area** | repo-wide |
-| **Owner** | unassigned |
 
-Internal markdown links are checked by a manual shell sweep (in
-[STRATEGY.md](STRATEGY.md)). It has been run and passes, but nothing prevents a
-future commit from breaking a link.
+Internal markdown links were checked only by a manual shell sweep, so nothing
+prevented a future commit from breaking one. `koni-docs validate` covers references
+in the koni-docs ID graph but not arbitrary relative links in `README.md`,
+`AGENTS.md`, or the template READMEs — which is where most of this repo's links
+live.
 
-`koni-docs validate` covers doc *references* in the koni-docs ID graph; it does not
-cover arbitrary relative links in `README.md`, `AGENTS.md`, or the template READMEs
-— which is where most of this repo's links live.
+**Closed by**: [`scripts/verify.sh`](../../scripts/verify.sh) and
+[`.github/workflows/verify.yml`](../../.github/workflows/verify.yml)
+([US-1.4](../sprints/stories/US-1.4-open-source-standard.md)). CI runs the same
+script a contributor runs locally, on every push and pull request.
 
-**To close**: a CI job running the sweep. Deferred until the repo is public and CI
-is warranted.
+**Evidence**: the check found two real defects on its first run — `sed` snippets
+inside fenced code blocks being parsed as markdown links. Fixed by stripping fences
+before extraction, which is now covered by the same check.
 
----
-
-## Closed
-
-None yet.
+**Coverage beyond links**: the script also verifies English-only text, template
+version identity, indicator-handle create/release parity, closed-bar reads, absence
+of committed binaries, and the VERSION/CHANGELOG pairing.

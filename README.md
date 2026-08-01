@@ -3,7 +3,10 @@
 **Build a MetaTrader 5 trading bot and deploy it on Senti — starting from a
 template that already gets the hard parts right.**
 
+[![verify](https://github.com/Koniverse/koni-ea/actions/workflows/verify.yml/badge.svg)](https://github.com/Koniverse/koni-ea/actions/workflows/verify.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![MetaTrader 5](https://img.shields.io/badge/platform-MetaTrader%205-0a0a0a.svg)](https://www.metatrader5.com/)
 
 Two things ship from this repo:
 
@@ -95,10 +98,17 @@ npx skills add Koniverse/koni-ea --skill '*' --agent '*' # install all, all agen
 | Doc | For |
 |---|---|
 | [templates/mql5/STARTER_EA/README.md](templates/mql5/STARTER_EA/README.md) | Building your first bot, step by step |
+| [docs/SETUP.md](docs/SETUP.md) | Full setup, including the MetaTrader side |
 | [AGENTS.md](AGENTS.md) | AI assistants — the workflow and the rules |
 | [REPO_STRUCTURE.md](REPO_STRUCTURE.md) | Where things live and how to add one |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Sending a template or skill back upstream |
-| [docs/SETUP.md](docs/SETUP.md) | Full setup, including the MetaTrader side |
+| [SUPPORT.md](SUPPORT.md) | Getting help, and what this project does not cover |
+| [SECURITY.md](SECURITY.md) | Reporting a vulnerability, and the threat model |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards |
+| [docs/CHANGELOG.md](docs/CHANGELOG.md) | Release history |
+
+Everything in this repository is written in English — code, comments, docs, and
+commit messages. CI enforces it.
 
 ---
 

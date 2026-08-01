@@ -1,0 +1,70 @@
+name: Feature request
+description: Propose a new template, a new skill, or a change to how this repository works.
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Proposals that get built usually start from a problem someone actually hit,
+        not from a feature someone wanted. Lead with the problem.
+
+        Open a [Discussion](https://github.com/Koniverse/koni-ea/discussions) instead
+        if you are still figuring out whether the idea is right.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What are you proposing?
+      options:
+        - A new template
+        - A change to an existing template
+        - A new skill, or a change to a skill
+        - Documentation
+        - Repository tooling
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation where the current repository falls short. Be concrete about who hits it and when.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What do you propose?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What else did you consider?
+      description: Including "do nothing". A proposal that has weighed its alternatives is much easier to accept.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      description: These are standing constraints, not preferences. A proposal that violates one will be declined.
+      options:
+        - label: This does not require presenting any strategy as profitable
+          required: true
+        - label: This does not require committing third-party or proprietary strategy logic
+          required: true
+        - label: I understand templates ship source only — compiled `.ex5` binaries are never committed
+          required: true
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Would you build it?
+      options:
+        - label: I am willing to open a pull request for this
+          required: false

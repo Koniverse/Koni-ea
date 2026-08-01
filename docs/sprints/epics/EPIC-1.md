@@ -61,13 +61,14 @@ conventions it establishes are in [REPO\_STRUCTURE.md](../../../REPO_STRUCTURE.m
 
 ## Stories
 
-| ID                                                   | Title                                                            | Goal                                                                                                      | Status | Version |
-| ---------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------ | ------- |
-| [US-1.1](../stories/US-1.1-repo-bootstrap.md)        | Bootstrap the repo to the Koniverse standard                     | Doc tree, skill wiring, commit gate, agent integration surface — a repo that enforces its own conventions | ✅ done | v0.1.0  |
-| [US-1.2](../stories/US-1.2-relocate-ea-skills.md)    | Relocate koni-ea-dev + koni-ea-ops from Koni-Skills              | One copy of each EA skill, owned here, with every consumer re-pointed                                     | ✅ done | v0.1.0  |
-| [US-1.3](../stories/US-1.3-public-release-format.md) | Format for public release — template, license, agent entry point | A working MQL5 template, MIT license, and entry-point docs an agent can follow                            | ✅ done | v0.2.0  |
+| ID                                                   | Title                                                                          | Goal                                                                                                      | Status | Version |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- | ------ | ------- |
+| [US-1.1](../stories/US-1.1-repo-bootstrap.md)        | Bootstrap the repo to the Koniverse standard                                   | Doc tree, skill wiring, commit gate, agent integration surface — a repo that enforces its own conventions | ✅ done | v0.1.0  |
+| [US-1.2](../stories/US-1.2-relocate-ea-skills.md)    | Relocate koni-ea-dev + koni-ea-ops from Koni-Skills                            | One copy of each EA skill, owned here, with every consumer re-pointed                                     | ✅ done | v0.1.0  |
+| [US-1.3](../stories/US-1.3-public-release-format.md) | Format for public release — template, license, agent entry point               | A working MQL5 template, MIT license, and entry-point docs an agent can follow                            | ✅ done | v0.2.0  |
+| [US-1.4](../stories/US-1.4-open-source-standard.md)  | Meet the open-source standard — community health files, CI, English everywhere | Community health files, `.github/` templates, CI, and one language throughout                             | ✅ done | v0.3.0  |
 
-Total: 14 points.
+Total: 19 points.
 
 ## Cross-cutting invariants
 

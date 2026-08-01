@@ -1,0 +1,23 @@
+# Code owners — automatically requested for review on matching paths.
+# Last match wins, so order matters: general rules first, specific overrides after.
+# https://docs.github.com/articles/about-code-owners
+
+# Default owner for everything
+*                       @jindo9986
+
+# The product. A change here reaches every partner who installs or copies it.
+/skills/                @jindo9986
+/templates/             @jindo9986
+
+# Anything that moves real money gets the same scrutiny as a release.
+*.mq5                   @jindo9986
+*.mqh                   @jindo9986
+*.set                   @jindo9986
+
+# Repository contract: license, security posture, contribution bar, agent rules.
+/LICENSE                @jindo9986
+/SECURITY.md            @jindo9986
+/CONTRIBUTING.md        @jindo9986
+/CODE_OF_CONDUCT.md     @jindo9986
+/AGENTS.md              @jindo9986
+/.github/               @jindo9986
