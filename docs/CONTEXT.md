@@ -101,3 +101,37 @@ being tracked.
 **Date**: 2026-08-02
 **Version**: 0.2.0
 **Reference**: [D1](#d1-the-ea-skills-live-here-not-in-koni-skills--and-there-is-only-one-copy), `koni-ea-dev`, `koni-ea-ops`.
+
+---
+
+### D3. The `tests` pre-push gate is disabled — a gate that cannot run is not a gate
+
+**Context**: `koni-setup` vendors a default `gates.conf` that includes a pre-push
+`tests` check running `npm test`. That default assumes a **code** profile. This repo is
+content profile: no `package.json`, no test runner, and — per
+[docs/tests/STRATEGY.md](tests/STRATEGY.md) — nothing executable to test. The first
+`git push` failed with `ENOENT: no such file or directory, open '…/package.json'`.
+
+**Decision**: Comment the `tests` line out of `.koni-harness/gates.conf`, leaving it in
+place with an explanation of why, rather than deleting the line or leaving it failing.
+
+**Rationale**: The three alternatives are worse. *Leave it broken* — every push fails,
+so the first person under time pressure reaches for `--no-verify`, which disables
+**every** gate including credential-scan; a gate that trains people to bypass gates is
+worse than no gate. *Add a stub `package.json` with a no-op `test` script* — invents a
+code-profile artifact to satisfy a check that has nothing to check, and any future
+reader would reasonably assume this repo has a test suite. *Delete the line* — loses the
+information that a test gate exists in the standard and was consciously turned off here.
+
+Commenting it out with the reason keeps the fact visible to the next person and makes
+re-enabling a one-character edit the day this repo grows something runnable.
+
+**Impact**: `.koni-harness/gates.conf` — one line commented. Pre-push now runs
+`credential-scan` only. The real coverage gaps this repo *does* have (the template has
+never been compiled, run, or backtested) are tracked as
+[F-1 → F-3](tests/findings.md) — they are unaffected by this, because no `npm test`
+would have caught them either.
+
+**Date**: 2026-08-02
+**Version**: 0.2.0
+**Reference**: [docs/tests/STRATEGY.md](tests/STRATEGY.md), [findings.md](tests/findings.md), [D2](#d2-the-repo-goes-public--scope-narrows-to-mql5-and-the-toolchain-leaves-git).

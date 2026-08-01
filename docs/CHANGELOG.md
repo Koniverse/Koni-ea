@@ -13,7 +13,12 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ## [Unreleased]
 
-(empty — track here while in dev but not yet shipped)
+### Fixed
+- **The `tests` pre-push gate is disabled** ([D3](CONTEXT.md)). The vendored default
+  runs `npm test`, which assumes a code profile; this is a content repo with no
+  `package.json`, so every push failed with `ENOENT`. Commented out with the reason
+  in place rather than deleted — a gate that fails on every push trains people to
+  reach for `--no-verify`, which disables credential scanning too.
 
 ---
 
