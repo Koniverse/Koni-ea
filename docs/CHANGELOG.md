@@ -17,6 +17,44 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.4.0] — 2026-08-02 — the published skills work outside Koniverse — v0.4.0
+
+Reviewed both skills against the Anthropic skill-authoring guide and koni-qc's
+skill-grading dimensions. The mechanical checks were already clean — 12/12 references
+carry a TOC, 0 dangling links, both descriptions are third-person trigger-form and
+discriminate cleanly from each other. The defects were all the same shape: **the
+skills still assumed the reader was inside Koniverse.**
+
+### Fixed
+- **`koni-ea-ops` told external users to do something impossible.**
+  `registry-and-magic.md` mandated *"Notion assigns it — never hand-pick one"* — but a
+  partner has no Notion table, and the rule forbade the only action available to them.
+  An agent following it stalls or violates it. Added
+  **[Running your own registry](../skills/koni-ea-ops/references/registry-and-magic.md#running-your-own-registry)**:
+  the four rules a MagicNumber scheme must satisfy, a worked `registry.yaml`, and an
+  issue-and-increment workflow. The file now opens by pointing non-Koniverse readers
+  there.
+- **Neither skill knew the template existed.** A partner installs `koni-ea-dev` with
+  `npx skills add` and gets the MQL5 standard — but nothing about
+  `templates/mql5/STARTER_EA/`, which is this repo's entire "copy it, replace one
+  function" proposition. `AGENTS.md` carries that instruction and **does not travel
+  with the skill**. Both skills now open with the template, cloneable in two lines.
+- **Both cited private repositories as authority.** `Trading-Resources`,
+  `Senti-Quant` `terminal_manager`, and a `CONTEXT D9` an outside reader cannot fetch
+  and an agent may waste a turn trying to. Reframed as provenance, explicitly marked
+  internal, with everything load-bearing restated in-skill.
+- **`deployment.md` presented internal infrastructure as the path.** "The Koni compile
+  service" now says plainly that F7 in MetaEditor produces the identical binary, and
+  ships the one-line `metaeditor64.exe /compile` invocation for anyone automating it.
+
+### Known gap
+- **[F-8](tests/findings.md) — this was a single-grader review, and no score is
+  claimed.** koni-qc's rubric requires four dimensions scored by four *separate*
+  agents against a ≥95 bar, precisely because one grader who likes a skill inflates
+  every axis. That review has not been run.
+
+---
+
 ## [0.3.6] — 2026-08-02 — five gate checks were never running — v0.3.6
 
 ### Fixed

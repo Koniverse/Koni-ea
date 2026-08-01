@@ -14,13 +14,27 @@ production `.ex5` it deploys from. The goal is a running instance whose identity
   compiling — warnings-as-errors, the include-path trap — is in the **koni-ea-dev**
   skill; here it is a release gate: an EA that does not compile clean is not
   releasable.)
-- **Production (the Koni compile service)**: a MetaEditor CLI wrapper on a
-  dedicated Windows host that emits the `.ex5` headlessly. Two operational facts
-  matter when reading its output:
+- **Production (an internal compile service)**: Koniverse runs a MetaEditor CLI
+  wrapper on a dedicated Windows host that emits the `.ex5` headlessly. **You do not
+  need it** — F7 in MetaEditor produces the identical binary. The service exists to
+  automate the step, not to change its output.
+
+  Two operational facts matter if you automate this yourself, and both are the
+  standard regardless of what wraps `metaeditor64.exe`:
   - **Success is the parsed `Result: 0 errors` line, not the process exit code** —
     MetaEditor's exit codes are unreliable; never gate a pipeline on `$?`.
-  - Compile errors come back as **structured data** (`ok:false` + diagnostics), not
-    a crash — treat a failed compile as a normal, inspectable outcome.
+  - Compile errors come back as **structured data** (a failure flag plus
+    diagnostics), not a crash — treat a failed compile as a normal, inspectable
+    outcome rather than an exception.
+
+  A minimal headless compile, which is all the service does:
+
+  ```bat
+  metaeditor64.exe /compile:"MY_STRATEGY_v1.00.mq5" /log:"compile.log"
+  ```
+
+  Then parse `compile.log` for `0 errors`. **MetaEditor is Windows-only** — on macOS
+  or Linux this step needs a Windows VM or Wine; there is no native alternative.
 
 ## Deploy to a terminal
 

@@ -19,12 +19,25 @@ description: >
 > [koni-ea-dev]**. An EA is not "done" when it compiles — it is done when it is
 > versioned, registered, backtested, deployed, and documented.
 
-This standard is drawn from the `Trading-Resources` archive's SOPs
-(`ALGORITHM_DEPLOYMENT_SOP`, `BOT_DOCUMENT_SOP`, the deprecated
-`ALGORITHM_RELEASE_SOP`) and its `registry.yaml`, plus the Koni compile-service
-conventions from the `Senti-Quant` library corpus (for producing production `.ex5`).
-It governs how EA artifacts are named, tracked, and shipped — never how their logic
-is written.
+This standard is drawn from a live EA archive's deployment and documentation SOPs and
+its registry, plus the compile-service conventions behind a production MT5 terminal
+manager. Those sources are Koniverse-internal repositories, named in the references
+for provenance rather than as reading you are expected to have — everything
+load-bearing is restated here. It governs how EA artifacts are named, tracked, and
+shipped, never how their logic is written.
+
+> **If you are not on the Koniverse team**, two sections describe internal
+> infrastructure you will not have: the MagicNumber workflow assumes a Notion table,
+> and production `.ex5` builds assume an internal compile service. Both have a
+> portable equivalent stated alongside them —
+> [`registry-and-magic.md` § Running your own registry](references/registry-and-magic.md#running-your-own-registry)
+> and [`deployment.md`](references/deployment.md). The rules those tools enforce are
+> the standard; the tools are not.
+
+A working template that already follows this layout — `.mq5` + `.set` + per-version
+doc + `backtest/` under `<ALGO>/v<major>/v<X.YY>/` — is at
+[`templates/mql5/STARTER_EA/`](https://github.com/Koniverse/Koni-ea/tree/main/templates/mql5/STARTER_EA).
+Copy its shape rather than inventing one.
 
 ## koni-ea-dev vs koni-ea-ops
 

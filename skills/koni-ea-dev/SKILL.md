@@ -23,15 +23,40 @@ description: >
 > *programming*; the operational lifecycle around a released EA (versioning,
 > registry, deployment, per-version docs) is its sibling skill **koni-ea-ops**.
 
-The standard is **synthesized from two production corpora** and resolves the places
-where they disagree (each reference names the divergence and the chosen canonical
-form):
+## Start from the template, not a blank file
 
-- **Strategy EAs** — the `Trading-Resources` archive of ~14 live EA families
-  (EMA_CO, ORB, ALPHA_TREND_DCA, GRID_DCA, MFR_DCA, STP, TRB, …), each a
-  self-contained `.mq5` including only the stock `<Trade\...>` classes.
-- **The Koni MQL5 library** — the `Senti-Quant` `terminal_manager` header-only
-  `Include/Koni/**` modules, the reference for building **reusable `.mqh`** rather
+A working skeleton that already implements everything below —
+lifecycle, closed-bar signal gate, risk-percent sizing, SL/TP against the broker stop
+level, equity breaker, daily loss limit, margin pre-check, restart recovery — ships at
+**[`templates/mql5/STARTER_EA/`](https://github.com/Koniverse/Koni-ea/tree/main/templates/mql5/STARTER_EA)**
+in the `Koniverse/Koni-ea` repository:
+
+```bash
+git clone https://github.com/Koniverse/Koni-ea.git
+cp -r Koni-ea/templates/mql5/STARTER_EA  MY_STRATEGY
+```
+
+Exactly one function is marked for replacement — `Signal()`. Everything else is the
+chassis this skill describes, already built to it. Writing an EA from scratch means
+re-deriving all of it, and the failure mode is silent: the code runs, the backtest is
+green, and the bug appears on a live account.
+
+Use this skill to **write `Signal()` correctly and to verify what you changed**. Read
+on for the standard the rest of the file already follows.
+
+## Where the standard comes from
+
+**Synthesized from two production corpora**, resolving the places where they disagree
+(each reference names the divergence and the chosen canonical form). Both are
+Koniverse-internal repositories — named here for provenance, not as reading you are
+expected to have. Everything load-bearing from them is restated in this skill and its
+references:
+
+- **Strategy EAs** — an archive of ~14 live EA families (EMA_CO, ORB,
+  ALPHA_TREND_DCA, GRID_DCA, MFR_DCA, STP, TRB, …), each a self-contained `.mq5`
+  including only the stock `<Trade\...>` classes.
+- **A production MQL5 library** — the header-only `Include/Koni/**` modules behind a
+  live MT5 terminal manager, the reference for building **reusable `.mqh`** rather
   than a single-file strategy EA.
 
 ## The two build modes

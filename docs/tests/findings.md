@@ -122,6 +122,47 @@ running `install-gate.sh`.
 
 ---
 
+### F-8 — The skills have not had the certified four-agent grade
+
+| | |
+|---|---|
+| **Severity** | Medium |
+| **Opened** | 2026-08-02 (v0.4.0) |
+| **Area** | `skills/koni-ea-dev/`, `skills/koni-ea-ops/` |
+| **Owner** | unassigned |
+
+koni-qc's [`skill-grading.md`](../../skills/koni-ea-dev/) rubric — the bar koni-harness
+loads at the Review stage when the deliverable is a skill — requires **four
+dimensions, each scored /25 by a _separate_ agent**, with a hard pass bar of
+**≥95/100**:
+
+| Dim | Measures | Delegated tool |
+|---|---|---|
+| D1 | Discoverability — does the description fire on the right queries and stay silent on near-misses | `skill-creator` trigger eval, or a blind router |
+| D2 | Rule-robustness — do the hard rules hold when an agent is pressured to break them | `writing-skills` pressure scenarios |
+| D3 | Content quality, author-blind | `superpowers:code-reviewer` |
+| D4 | Best-practices conformance, averaged over ≥2 runs | Anthropic `anthropic-best-practices.md` |
+
+The rubric is explicit that **one agent must not score all four** — "a grader that
+likes the skill inflates every axis."
+
+**What was actually done (v0.4.0)**: a single-grader review against the same four
+dimensions, using the Anthropic best-practices guide and koni-docs'
+`check-references.py`. It found and fixed three real defects (see the v0.4.0
+changelog). It is **not** the certified grade and **no score is claimed** — a
+self-assessed number from one grader is the exact artifact the rubric exists to
+prevent.
+
+**Also unmet**: the rubric requires re-grading **all four dimensions** after *any*
+change to a passing skill. These skills have never had a baseline grade, so there is
+nothing to re-grade against.
+
+**To close**: run the four dimensions with independent graders and record the
+scorecard. If any dimension is <95 overall, fix and re-grade the whole skill, not the
+diff.
+
+---
+
 ### F-5 — A vendored gate file carries a Vietnamese comment into this English repo
 
 | | |

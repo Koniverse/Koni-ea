@@ -353,3 +353,51 @@ permissions. Nothing said "this feature does not exist for private repositories.
 
 Sibling of §2 — that entry is about never reporting a verification you could not run;
 this one is about never shipping a promise you never exercised.
+
+---
+
+## 10. Publishing a skill changes its audience, and some rules stop being executable
+
+**What happened (v0.4.0)**: `koni-ea-ops` shipped a hard rule in
+`registry-and-magic.md`: *"Notion assigns it — never hand-pick one."* Inside
+Koniverse that is correct and load-bearing — the Notion table is the assigning
+authority, and hand-picking is how two instances collide on one MagicNumber.
+
+Published, the same sentence reaches a partner with no Notion table. It tells them to
+obtain a number from a system they cannot reach, and in the same breath **forbids the
+only action available to them**. An agent reading it has two options, and both are
+bad: stall, or violate an explicitly stated rule. Neither is what the rule wanted.
+
+Two milder versions of the same defect shipped alongside it: both skills cited private
+repositories as authority (an outside agent may spend a turn trying to fetch a
+`CONTEXT D9` that does not exist for it), and `deployment.md` presented an internal
+compile service as *the* production path when `F7` in MetaEditor produces the
+identical binary.
+
+**Why**: A rule has two parts — the **guarantee** it protects and the **mechanism**
+that delivers it. Written for one team, they fuse: "use Notion" *is* "keep magics
+unique," because there is only one way to do it. Publishing separates them, and only
+the guarantee survives the move. What ships as an instruction is the mechanism, which
+is the half that does not travel.
+
+This is not the same as the language problem in [§9's sibling, D4](CONTEXT.md) —
+translated prose is still followable. An unfollowable instruction reads perfectly and
+cannot be obeyed, which makes it harder to spot: nothing about the sentence looks
+wrong.
+
+**How to avoid**:
+- Before publishing a skill, read every hard rule as **someone with none of your
+  infrastructure**. No internal tool, no shared repo, no team channel. Can they comply?
+- For each rule that names a tool, separate the two halves and state both: *what must
+  be true* (the standard) and *how we do it* (the instance). Ship the first as the
+  rule; mark the second as one implementation.
+- **A prohibition needs an available alternative.** "Never X" is only actionable
+  beside a reachable "do Y instead." Without one it is a dead end wearing a rule's
+  clothes.
+- Cite private sources as **provenance, marked as unfetchable** — never as authority a
+  reader is expected to consult. Restate anything load-bearing in the skill itself.
+- Check what the skill assumes it is packaged *with*. `AGENTS.md` told agents to start
+  from the template; `npx skills add` ships neither `AGENTS.md` nor the template, so
+  the skill had to carry that pointer itself.
+
+See [CHANGELOG v0.4.0](CHANGELOG.md), [F-8](tests/findings.md).

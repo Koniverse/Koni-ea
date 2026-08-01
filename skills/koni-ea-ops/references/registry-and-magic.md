@@ -1,16 +1,29 @@
 # MagicNumber & the registry
 
+> **Read this first if you are not on the Koniverse team.** The sections below
+> describe the *Koniverse* implementation, which uses a Notion table as the assigning
+> authority. You almost certainly do not have that table, and the rules are written as
+> though you do — "never hand-pick a magic" is unfollowable advice if nothing else
+> issues one.
+>
+> **The portable contract is in [Running your own registry](#running-your-own-registry)
+> at the end of this file.** Read that section instead; it states what a MagicNumber
+> must satisfy and how to keep a registry of your own. Everything the Notion workflow
+> exists to guarantee, it guarantees — the specific tool is not the standard.
+
 **Notion is the source of truth** for MagicNumbers (and the instance rows, where
 tracked — D9 scoped the old live-instance *registry* role out of the yaml itself).
 `algorithms/registry.yaml` is its **git-tracked mirror** — still maintained as the
 version-controlled record of magic-per-version, but note its *live-instance-registry*
-role was formally retired (Trading-Resources CONTEXT D9, which superseded the earlier
+role was formally retired (D9 in the source archive's own decision log — a
+Koniverse-internal repository, cited for provenance and not fetchable; it superseded the earlier
 "registry.yaml as source of truth" decision). What survives and stays in scope is the
 **MagicNumber-via-Notion workflow** and the git mirror; the old automation around it
 (Grafana, a `sync_registry` job) is gone, so the checks below are manual.
 
 **Contents**: [MagicNumber rules](#magicnumber-rules) · [The registry mirror shape](#the-registry-mirror-shape) ·
-[Instances](#instances) · [The collision audit](#the-collision-audit)
+[Instances](#instances) · [The collision audit](#the-collision-audit) ·
+[Running your own registry](#running-your-own-registry)
 
 ## MagicNumber rules
 
@@ -88,3 +101,55 @@ grep -rh "MagicNumber=" algorithms/mql5/ | sort | uniq -c | sort -rn
 
 Any count `> 1` on a real magic (not a `0`/placeholder) is a collision waiting to
 merge two instances — resolve it against Notion before the second one goes live.
+
+---
+
+## Running your own registry
+
+For anyone outside the Koniverse team. Notion is *an* assigning authority, not *the*
+requirement. Strip it away and four rules remain — these are the standard:
+
+1. **Every running instance has its own MagicNumber, and it is `> 0`.** MT5 does not
+   enforce uniqueness. Two instances sharing a magic silently merge in every
+   position and deal query, so each one manages the other's trades and every report
+   is wrong. Nothing warns you.
+2. **A number, once used, is never reused** — not even after the instance is retired.
+   Closed deals keep the magic in history; reusing it corrupts the reporting of both.
+3. **One authority issues numbers, and it is not a person's memory.** Any durable,
+   append-only record works: a committed `registry.yaml`, a spreadsheet, a database
+   table, an issue in your tracker. What matters is that a *single* place decides,
+   and that asking it is easier than guessing.
+4. **The number agrees in three places** — the EA's `InpMagicNumber` default, its
+   `.set` file, and the registry entry. A disagreement means a deploy runs a magic
+   the registry never issued, which is exactly the collision in rule 1.
+
+A minimal registry that satisfies all four, committed to git:
+
+```yaml
+# registry.yaml — one entry per algorithm, one row per running instance
+MY_STRATEGY:
+  next_magic: 990003        # bump on issue; never decrement, never reuse a retired value
+  instances:
+    - magic: 990001
+      version: v1.00
+      symbol: EURUSD
+      timeframe: M15
+      account: "demo-1234"  # an identifier, never credentials
+      status: live
+    - magic: 990002
+      version: v1.00
+      symbol: XAUUSD
+      timeframe: M15
+      account: "demo-1234"
+      status: retired       # kept on purpose — 990002 is now permanently spent
+```
+
+Issuing a number is then: read `next_magic`, use it, increment it, commit. The commit
+is the audit trail, and `git log` answers "who took 990002 and when".
+
+**The collision audit** ([above](#the-collision-audit)) applies unchanged — it reads
+the EAs and the terminal, not Notion. Run it whatever your registry is.
+
+**Do not hand-pick a number per deploy.** That is the rule the Notion workflow exists
+to enforce, and it holds without Notion: picking ad hoc is how two instances end up on
+the same magic, and the failure is silent until the numbers stop adding up.
