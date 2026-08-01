@@ -42,6 +42,14 @@ promised "a green run here is a green run there" and was not delivering it.
   org-owned. The gitleaks **CLI** is MIT, so CI now installs a pinned binary and runs
   it directly.
 
+- **The secret scan flagged a content hash as a credential.** `_bmad/_config/files-manifest.csv`
+  carries a `hash` column of SHA-256 digests, one per installed BMAD file; a
+  64-character hex string has the entropy of a credential and none of the context
+  that distinguishes it. Added `.gitleaks.toml` with an allowlist scoped to the three
+  manifest files — not to `_bmad/` as a whole, so a real credential landing elsewhere
+  under that tree is still caught. The allowlist states why it exists so a future
+  reader can re-evaluate it rather than trust it blindly.
+
 Recorded as [LESSONS §7](LESSONS.md) — a check that depends on ambient tooling fails
 open, reporting success while doing nothing, and grows more trusted the longer it
 does so.

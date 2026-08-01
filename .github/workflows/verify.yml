@@ -62,5 +62,8 @@ jobs:
           sudo install -m 0755 gitleaks /usr/local/bin/gitleaks
           gitleaks version
 
+      # --config is explicit: gitleaks only auto-discovers .gitleaks.toml in some
+      # invocation modes, and a silently-ignored allowlist looks exactly like a
+      # working one until it doesn't.
       - name: Scan history for secrets
-        run: gitleaks git --no-banner --redact --verbose .
+        run: gitleaks git --no-banner --redact --verbose --config .gitleaks.toml .

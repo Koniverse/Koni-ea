@@ -80,6 +80,35 @@ per-version doc that it is a mechanical check rather than a performance claim.
 
 ---
 
+### F-5 — A vendored gate file carries a Vietnamese comment into this English repo
+
+| | |
+|---|---|
+| **Severity** | Low |
+| **Opened** | 2026-08-02 (v0.3.2) |
+| **Area** | `.koni-harness/checks/design-first.sh` |
+| **Owner** | upstream — `Koniverse/Koni-Skills` |
+
+Line 4 of the vendored gate file contains a Vietnamese quotation:
+`# discovered by /design-review is REWORK ("...")`. The file is tracked here, so a
+public English repository ships one non-English line.
+
+**Why it is open rather than fixed**: the file is vendored by
+`install-gate.sh` from `Koni-Skills` (`skills/koni-harness/scripts/checks/design-first.sh`)
+and is **overwritten on every gate reinstall**. Editing the copy here would be undone
+by the next `install-gate.sh` run and would make the two diverge in the meantime.
+`Koni-Skills` is a separate repository with its own language policy, and changing
+that policy is not this repo's call.
+
+The English check in `scripts/verify.sh` excludes `.koni-harness/` for exactly this
+reason — flagging it produces a failure no contributor here can act on.
+
+**To close**: translate the quotation upstream in `Koni-Skills`, keeping the original
+Vietnamese in parentheses so the provenance of the quote survives. Then re-run
+`install-gate.sh` here and drop the exclusion from `verify.sh`.
+
+---
+
 ## Closed
 
 ### F-4 — No automated link checking

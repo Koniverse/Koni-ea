@@ -1,0 +1,27 @@
+# gitleaks configuration
+#
+# Extends the upstream default rule set — this file only adds allowlists, it never
+# removes a rule. Every entry below is a documented false positive with the reason
+# it is one, so a future reader can re-evaluate it rather than trust it blindly.
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = """
+BMAD installer manifests. These CSVs have a `hash` column of SHA-256 content
+digests, one per installed file, used by `bmad-method install` to detect drift.
+gitleaks' generic-api-key rule fires on them because a 64-character hex string has
+the entropy of a credential and none of the context that would distinguish it.
+
+They are content hashes of public skill files, not secrets: recomputable from the
+files themselves, worthless to an attacker, and regenerated on every install.
+
+Scoped to the three manifest files rather than to `_bmad/` as a whole, so a real
+credential landing anywhere else under that tree is still caught.
+"""
+paths = [
+  '''^_bmad/_config/files-manifest\.csv$''',
+  '''^_bmad/_config/skill-manifest\.csv$''',
+  '''^_bmad/_config/bmad-help\.csv$''',
+]
