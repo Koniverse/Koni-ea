@@ -401,3 +401,55 @@ wrong.
   the skill had to carry that pointer itself.
 
 See [CHANGELOG v0.4.0](CHANGELOG.md), [F-8](tests/findings.md).
+
+---
+
+## 11. Name a product by its destination, not by its toolchain
+
+**What happened (v0.5.0)**: For four versions the README opened with *"Build a
+MetaTrader 5 trading bot and deploy it on Senti."* `SETUP.md` §4 was titled *"Compile
+and test"* and began *"Install into MetaTrader… attach the EA to a chart."* Every
+sentence was individually true. Together they taught the wrong model: that MT5 is
+where the bot lives and Senti is an optional extra step at the end.
+
+The operator corrected it. Senti runs the bot on **its own** terminals, in a
+datacenter near the broker, 24/5, logged into the account the user linked. The user's
+MetaTrader is a build environment — compiler, backtester, demo harness — and nothing
+more.
+
+The framing error had a concrete cost waiting behind it. A user who believes MT5 is
+the runtime attaches the finished EA to a local chart to "see it work," then also
+uploads it to Senti. Two instances, one broker account, same signal: **double the
+position size configured**, each instance managing trades the other opened, no
+warning. The docs never said "run it locally against your real account" — they simply
+never said not to, because the model they taught made the question invisible.
+
+**Why**: A product gets named after whatever the author looked at most while building
+it. Four versions of writing MQL5, MetaEditor, `.mq5`, `.ex5`, Strategy Tester — and
+the name that emerged was "a MetaTrader 5 bot." That is the *toolchain*. The
+destination was one line in a table.
+
+The tell is that the wrong framing is never a false statement. It is a true statement
+with the wrong subject, which is why review does not catch it: every sentence passes,
+and the model they add up to is still wrong.
+
+**How to avoid**:
+- **Write the first line of the README as the destination, not the technology.** "A
+  bot for Senti" and "a MetaTrader 5 bot" describe the same artifact and produce
+  different users.
+- When a build tool and a runtime differ, **say which is which on every page that
+  mentions either**. Not once in an architecture doc nobody opens.
+- Ask what a reader would *do* after each section. If §4 ends with "attach it to a
+  chart" and the reader stops there, the docs said they were finished.
+- **Name the hazard the wrong model creates**, not just the correct model. "It runs on
+  Senti" is forgettable; "two instances on one account double your size, silently" is
+  not.
+
+**A second-order finding from the same sweep**: a `grep` for the old framing turned up
+two places still describing the per-version doc as Vietnamese — a rule [D4](CONTEXT.md)
+had changed two versions earlier, in files nobody re-read because the decision felt
+"done." A decision is not applied until a sweep proves it. Same class as
+[§6](#6-a-bulk-find-and-replace-does-not-know-which-files-are-append-only), from the
+other direction: there the sweep reached too far, here it did not reach far enough.
+
+See [RUNNING-ON-SENTI.md](RUNNING-ON-SENTI.md).

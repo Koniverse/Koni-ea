@@ -2,8 +2,14 @@
 
 ## The problem
 
-Senti executes trading bots on real MetaTrader 5 accounts. Getting a bot onto it
-requires MQL5 — and MQL5 is where most people who want to automate a strategy stop.
+Senti runs trading bots on its own MT5 terminals, against the broker account a user
+links — 24/5, in a datacenter near the broker. Getting a bot onto it requires MQL5,
+and MQL5 is where most people who want to automate a strategy stop.
+
+The bot is *for Senti*; MetaTrader is only where it gets built. That distinction is
+load-bearing and is documented at [RUNNING-ON-SENTI.md](RUNNING-ON-SENTI.md) — a user
+who thinks the goal is "an EA on my MetaTrader" builds the right code for the wrong
+runtime, and can end up double-trading one account.
 
 The barrier is not the strategy. It is everything around it. An Expert Advisor is
 maybe 5% entry logic and 95% chassis: order placement, position sizing, stop
@@ -47,8 +53,10 @@ matters most here, because plausible-looking MQL5 is exactly the failure mode.
 | **Senti users** automating a strategy they already trade manually | The template, plus the step-by-step loop |
 | **Developers** who know MQL5 already | The skills, as a review standard and a pitfall checklist |
 
-Vietnamese-first, matching Senti's market: per-version EA docs are written in
-Vietnamese while code, identifiers and commits stay English.
+Senti's market is Vietnam-first, but this repository is **English throughout** —
+code, identifiers, documentation, and commits. It ships to partners in any market, and
+a standard nobody can read is not a standard ([CONTEXT D4](CONTEXT.md), enforced by
+`scripts/verify.sh`).
 
 ## What it is not
 

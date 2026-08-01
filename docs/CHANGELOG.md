@@ -17,6 +17,54 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.5.0] — 2026-08-02 — the bot runs on Senti, not on your MetaTrader — v0.5.0
+
+A positioning correction, and it is not cosmetic. Through 0.4.0 the README opened
+*"Build a MetaTrader 5 trading bot and deploy it on Senti"* and `SETUP.md` §4 said
+*"Install into MetaTrader… attach the EA to a chart."* Every sentence was true; the
+model they added up to was wrong — that MT5 is the runtime and Senti is a step at the
+end.
+
+Senti runs the bot on **its own** MT5 terminals, in a datacenter near the broker,
+24/5, logged into the account the user linked. The user's MetaTrader is a build
+environment: compiler, backtester, demo harness. Nothing more.
+
+### Added
+- **[docs/RUNNING-ON-SENTI.md](RUNNING-ON-SENTI.md)** — the mental model as its own
+  document: the two halves, who does what, why it works this way (uptime, latency,
+  visibility a desktop cannot provide), and the end-to-end path.
+
+### Changed
+- **README** leads with the destination. New *Where your bot runs* section replaces
+  *What Senti expects*, with the workshop-versus-runtime diagram.
+- **`SETUP.md` §4 → "Build and test — on your machine"**, opening with a note that
+  nothing in it makes the bot live. **§5 → "Deploy to Senti — where it actually
+  runs."** Prerequisites now label MT5 as *build environment* and Senti as *runtime*.
+- **Template README** and its go-live checklist carry the same framing; two new
+  checklist lines make the reader confirm they understand it.
+- **`AGENTS.md`** gains *The framing you must never get wrong* — agents must never
+  present "attach to a chart" as the final step or call this repo's output "an EA for
+  MetaTrader."
+- **Both skills** state the destination. `koni-ea-dev` adds what it changes about the
+  code: restart survival is routine rather than an edge case, and the Journal is the
+  only witness because nobody is watching the chart.
+
+### Fixed — the hazard this prevents
+- **Documented the double-trade failure** in five places. A user who believes MT5 is
+  the runtime attaches the EA locally *and* deploys on Senti: two instances, one
+  broker account, same signal, **double the configured position size**, each managing
+  the other's trades, silently. The rule is now explicit — local MT5 stays on a demo
+  account.
+- **Two surviving D4 violations** — `REPO_STRUCTURE.md` and the template README still
+  described the per-version doc as Vietnamese, two versions after that rule changed.
+  Found by sweeping for the old framing, not by review.
+
+Recorded as [LESSONS §11](LESSONS.md) — a product gets named after whatever its author
+stared at while building it, and the wrong framing is never a false statement. It is a
+true statement with the wrong subject, which is why review does not catch it.
+
+---
+
 ## [0.4.0] — 2026-08-02 — the published skills work outside Koniverse — v0.4.0
 
 Reviewed both skills against the Anthropic skill-authoring guide and koni-qc's

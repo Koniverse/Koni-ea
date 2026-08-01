@@ -7,6 +7,7 @@ user-facing guides live at the repo root.
 
 | I want to… | Go to |
 |---|---|
+| Understand where my bot runs | [RUNNING-ON-SENTI.md](RUNNING-ON-SENTI.md) |
 | Build a bot | [templates/mql5/STARTER_EA/README.md](../templates/mql5/STARTER_EA/README.md) |
 | Set up my machine | [SETUP.md](SETUP.md) |
 | Understand why this repo exists | [BRIEF.md](BRIEF.md) |
@@ -18,6 +19,7 @@ user-facing guides live at the repo root.
 
 | Doc | What it holds | Mutability |
 |---|---|---|
+| [RUNNING-ON-SENTI.md](RUNNING-ON-SENTI.md) | Where a bot runs, and why it is not the user's machine | Revised if the platform model changes |
 | [BRIEF.md](BRIEF.md) | The problem, the audience, the non-goals | Revised as the product changes |
 | [SETUP.md](SETUP.md) | Clone → build → compile → deploy | Revised as steps change |
 | [CHANGELOG.md](CHANGELOG.md) | Release history under `[Unreleased]` + versions | **Append-only** |

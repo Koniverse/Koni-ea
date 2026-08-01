@@ -11,9 +11,30 @@
 build a trading bot and deploy it — an agent skill set that encodes the MQL5
 standard, and a working template to copy.
 
-Senti is a trading-bot platform that executes on **real MetaTrader 5 accounts at
-licensed brokers**. A bot reaches it as a compiled `.ex5` plus its `.set` preset,
+Senti is a trading-bot platform. It runs bots on **its own** MT5 terminals — Windows
+VPS hosts in a datacenter near the broker, running 24/5 — logged into the broker
+account the user linked. A bot reaches it as a compiled `.ex5` plus its `.set` preset,
 uploaded to the user's private catalog.
+
+### The framing you must never get wrong
+
+**The user's MetaTrader is a build environment. Senti is the runtime.**
+
+A user's local MT5 exists to compile, backtest, and demo-test. Their bot goes live
+when **Senti deploys it**, not when they attach it to a chart. Never tell a user their
+bot is running because it is attached locally, never present "attach to a chart" as
+the final step, and never describe this repo's output as "an EA for MetaTrader" — it
+is a bot for Senti that happens to be written in MQL5.
+
+Two consequences worth stating to a user unprompted:
+
+- **Their machine can be off.** Once deployed, nothing on their computer participates.
+- **Local MT5 stays on a demo account.** The same bot running locally *and* on Senti
+  against one broker account doubles every position and leaves each instance managing
+  trades the other opened. It is silent, and it is the most expensive mistake
+  available here.
+
+Full model: [docs/RUNNING-ON-SENTI.md](docs/RUNNING-ON-SENTI.md).
 
 This is a **content/distribution repo**. It has no build step and no app of its
 own. The code under `templates/` is a delivered artifact, not something this repo
@@ -75,6 +96,10 @@ the `.mq5` are three views of one thing. Change one, change all three.
 
 ### Step 5 — verify before claiming done
 
+The build is done when it compiles, backtests, and survives a demo week — **not when
+it is attached to a chart**. Say so when you hand off; "deploy it on Senti" is the
+last step, and it is the user's to take.
+
 ```bash
 ./scripts/verify.sh
 ```
@@ -113,6 +138,7 @@ backtest hides. Full reasoning:
 | One `MagicNumber` per instance, `> 0`, never reused | MT5 does not enforce it — two EAs silently manage each other's positions |
 | Rebuild state after restart | A recompile wipes memory while positions stay open |
 | English everywhere — code, comments, docs, commits | A contributor who cannot read half the repository |
+| The bot runs on **Senti**, not the user's MT5 | A user thinks a chart-attached EA is production: no 24/5, no failover — or worse, it double-trades a Senti deployment on the same account |
 
 **English has no exceptions here.** Every file in this repository is English:
 source, comments, documentation, issue and PR text, commit messages. An earlier
@@ -190,6 +216,7 @@ Templates are copied, not installed — clone and take the directory you need.
 
 ## Documentation
 
+- [RUNNING-ON-SENTI.md](docs/RUNNING-ON-SENTI.md) — **where a bot actually runs; read before advising anyone**
 - [BRIEF.md](docs/BRIEF.md) — what this repo is for and who it serves
 - [SETUP.md](docs/SETUP.md) — clone → build a bot → deploy
 - [CONTEXT.md](docs/CONTEXT.md) — append-only decision log

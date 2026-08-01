@@ -34,6 +34,12 @@ shipped, never how their logic is written.
 > and [`deployment.md`](references/deployment.md). The rules those tools enforce are
 > the standard; the tools are not.
 
+**The destination is Senti, not a desktop terminal.** A released EA is uploaded as
+`.ex5` + `.set` and run by Senti on its own MT5 terminals against the author's linked
+broker account. That is what "deploy" means throughout this skill. Attaching an EA to
+a local chart is testing, never release — and doing it against an account Senti is
+already trading doubles every position.
+
 A working template that already follows this layout — `.mq5` + `.set` + per-version
 doc + `backtest/` under `<ALGO>/v<major>/v<X.YY>/` — is at
 [`templates/mql5/STARTER_EA/`](https://github.com/Koniverse/Koni-ea/tree/main/templates/mql5/STARTER_EA).

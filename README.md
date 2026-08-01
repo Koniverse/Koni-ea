@@ -1,7 +1,12 @@
 # koni-ea
 
-**Build a MetaTrader 5 trading bot and deploy it on Senti — starting from a
-template that already gets the hard parts right.**
+**Build a trading bot for [Senti](#where-your-bot-runs) — starting from a template
+that already gets the hard parts right.**
+
+> **Your bot runs on Senti, not on your MetaTrader.** MT5 on your machine is where you
+> write, compile and test it. Senti is where it runs: on Senti's terminals, against
+> your linked broker account, 24/5, whether your computer is on or not.
+> **[Read this first →](docs/RUNNING-ON-SENTI.md)**
 
 [![verify](https://github.com/Koniverse/Koni-ea/actions/workflows/verify.yml/badge.svg)](https://github.com/Koniverse/Koni-ea/actions/workflows/verify.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -25,25 +30,48 @@ cp -r koni-ea/templates/mql5/STARTER_EA  my-bot
 ```
 
 Then follow [the 6-step loop](templates/mql5/STARTER_EA/README.md) — rename,
-replace `Signal()`, tune inputs, compile, backtest, upload.
+replace `Signal()`, tune inputs, compile, backtest on demo, **upload to Senti**.
+
+The last step is the point. Steps 1-5 happen in MetaTrader on your machine; the bot
+goes live when Senti deploys it, not when you attach it to your own chart.
 
 Working with an AI assistant? Point it at
 [`AGENTS.md`](AGENTS.md) and it will pick up the workflow and the rules.
 
 ---
 
-## What Senti expects
+## Where your bot runs
 
-Senti runs bots on **real MetaTrader 5 accounts at licensed brokers** — real
-money, real broker, full transparency. To get a bot onto it you upload two files:
+**On Senti.** Not on your machine.
+
+```
+YOUR MACHINE — the workshop          SENTI — where it runs
+  MetaEditor: write, F7 → .ex5         MT5 terminals, 24/5, in-region
+  Strategy Tester: backtest            logged into YOUR linked account
+  demo account: forward-test           live dashboard in your browser
+        │
+        └── .ex5 + .set ──── upload ────▶ deploy ────▶ running
+```
+
+You build it, then hand over two files:
 
 | File | What it is | How you get it |
 |---|---|---|
 | `MY_BOT_v1.00.ex5` | The compiled Expert Advisor | MetaEditor → F7 on your `.mq5` |
 | `MY_BOT_v1.00.set` | Its parameter preset | MT5 Inputs tab → Save |
 
-The bot lands in your **private catalog** — only you can see it — and deploys to a
-linked MT5 account through the same path as platform bots.
+Senti stores the binary, verifies its checksum, attaches it to one of its terminals
+against the account you linked, and restarts it if the terminal ever goes down. Your
+bot lands in your **private catalog** — only you see it.
+
+> [!WARNING]
+> **Never run the same bot on your own MT5 and on Senti against the same account.**
+> Two instances, one account, same signal — you get double the position size you
+> configured, and each one manages trades the other opened. Keep your local MT5 on a
+> **demo** account.
+
+Why it works this way — uptime, latency, and visibility your desktop cannot provide —
+is in **[docs/RUNNING-ON-SENTI.md](docs/RUNNING-ON-SENTI.md)**.
 
 ---
 
@@ -97,6 +125,7 @@ npx skills add Koniverse/Koni-ea --skill '*' --agent '*' # install all, all agen
 
 | Doc | For |
 |---|---|
+| [docs/RUNNING-ON-SENTI.md](docs/RUNNING-ON-SENTI.md) | **Where your bot runs, and why it is not your machine** |
 | [templates/mql5/STARTER_EA/README.md](templates/mql5/STARTER_EA/README.md) | Building your first bot, step by step |
 | [docs/SETUP.md](docs/SETUP.md) | Full setup, including the MetaTrader side |
 | [AGENTS.md](AGENTS.md) | AI assistants — the workflow and the rules |
@@ -114,10 +143,14 @@ commit messages. CI enforces it.
 
 ## Requirements
 
-- **MetaTrader 5** with MetaEditor, to compile. MetaEditor is **Windows-only** —
-  on macOS or Linux use a Windows VM, or MT5 under Wine/CrossOver.
-- A **demo account** for testing. Use it before real money, not after.
-- No build tooling for this repo itself — it is markdown and MQL5 source.
+- **MetaTrader 5** with MetaEditor — your **build environment**, not your runtime.
+  MetaEditor is the only MQL5 compiler and it is **Windows-only**; on macOS or Linux
+  use a Windows VM or Wine/CrossOver.
+- A **demo account** for your local MT5. Keep it that way — your real account belongs
+  to Senti, and running both against one account is the
+  [mistake that costs money](docs/RUNNING-ON-SENTI.md#the-mistake-that-costs-money).
+- A **Senti account** with a linked broker account — that is where the bot actually runs.
+- No build tooling for this repo itself; it is markdown and MQL5 source.
 
 ---
 

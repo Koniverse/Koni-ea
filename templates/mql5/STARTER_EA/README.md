@@ -1,8 +1,12 @@
 # STARTER_EA — MQL5 bot template
 
-The reference skeleton for a MetaTrader 5 Expert Advisor you can deploy on
-[Senti](https://github.com/Koniverse/Koni-ea#what-senti-expects). Copy it, replace
+The reference skeleton for a trading bot you deploy on **Senti**. Copy it, replace
 one function, ship.
+
+> **Your bot runs on Senti, not on your MetaTrader.** MT5 on your machine compiles and
+> tests it; Senti runs it, on Senti's terminals, against your linked broker account,
+> whether your computer is on or not.
+> [Read this first →](../../../docs/RUNNING-ON-SENTI.md)
 
 > **This is a structure, not a strategy.** Every lifecycle, risk and safety
 > mechanic is implemented and correct. The entry signal is a deliberately naive
@@ -16,7 +20,7 @@ STARTER_EA/
 └── v1/v1.00/
     ├── STARTER_EA_v1.00.mq5   ← the EA source (replace Signal(), keep the rest)
     ├── STARTER_EA_v1.00.set   ← default preset, upload alongside the .ex5
-    ├── STARTER_EA_v1.00.md    ← per-version doc (Vietnamese, per koni-ea-ops)
+    ├── STARTER_EA_v1.00.md    ← per-version doc (English, per koni-ea-ops)
     └── backtest/              ← your exported MT5 HTML report goes here
 ```
 
@@ -103,21 +107,34 @@ template already avoids; the point is to confirm your edits did not reintroduce 
 - [ ] Tested on a **demo** account for at least one full trading week
 - [ ] The `.set` file matches the input table in the `.md`
 - [ ] You have read the risk warning and accept that you own the outcome
+- [ ] **You understand the bot goes live when Senti deploys it** — not when you attach
+      it to a chart on your own machine
+- [ ] **Your local MT5 is on a demo account**, and will stay that way once the bot is
+      deployed on Senti
 
-## Deploying to Senti
+## Deploying to Senti — the step that makes it live
 
-Senti accepts a compiled `.ex5` plus its `.set`. Upload both; the bot lands in
-your private catalog (only you see it) and deploys through the same path as
-platform bots.
+Steps 1-6 above all happen on your machine. **None of them puts your bot in
+production.** It goes live here.
 
 ```
-MetaEditor F7  →  MY_STRATEGY_v1.00.ex5
-                  MY_STRATEGY_v1.00.set
-                        ↓  upload both
-                  Senti → your private bot catalog
-                        ↓
-                  deploy to a linked MT5 account
+YOUR MACHINE                          SENTI
+  MetaEditor F7 → .ex5                  stores + checksums the binary
+  MT5 Inputs tab → .set                 attaches it to a terminal, 24/5
+        │                               logged into YOUR linked account
+        └── upload both ──────────────▶ restarts it if the node goes down
+                                        streams ticks/positions to your browser
 ```
+
+The bot lands in your **private catalog** — only you see it — and deploys to your
+linked account through the same path as platform bots. Stop it from the Senti
+dashboard.
+
+> [!WARNING]
+> After uploading, **detach the EA from your local chart** — or keep local MT5 on a
+> demo account permanently. Two instances against one broker account both act on the
+> same signal: double the size you configured, each managing the other's trades, and
+> no warning. [Details](../../../docs/RUNNING-ON-SENTI.md#the-mistake-that-costs-money)
 
 The `.ex5` is a build artifact and is gitignored on purpose — commit the `.mq5`
 source and compile per release, so what you ship is always reproducible from what

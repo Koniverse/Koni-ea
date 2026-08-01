@@ -23,6 +23,25 @@ description: >
 > *programming*; the operational lifecycle around a released EA (versioning,
 > registry, deployment, per-version docs) is its sibling skill **koni-ea-ops**.
 
+## What you are building, and where it runs
+
+An EA written to this standard is **deployed on Senti**, a platform that runs it on
+its own MT5 terminals — 24/5, in a datacenter near the broker, logged into the
+account the user linked. The author's local MetaTrader is a **build environment**:
+compile, backtest, demo-test. It is not the runtime.
+
+Two things follow that change how you write the code:
+
+- **It must survive a restart.** Senti restarts terminals after crashes, node reboots,
+  and maintenance. The EA has to rebuild in-flight state from open positions and
+  GlobalVariables — see [self-recovery](references/mql5-pitfalls.md#self-recovery-after-restart).
+  On a desktop this is an edge case; here it is routine.
+- **It runs unattended.** Nobody is watching the chart. Every block, skip, and refusal
+  needs a `PrintFormat` with a bracketed tag, because the Journal is the only witness.
+
+Never tell an author their bot is live because it is attached to a chart locally. It
+is live when Senti deploys it.
+
 ## Start from the template, not a blank file
 
 A working skeleton that already implements everything below —

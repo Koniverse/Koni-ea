@@ -82,7 +82,7 @@ templates/<platform>/<ALGO>/
 └── v<major>/v<X.YY>/
     ├── <ALGO>_v<X.YY>.mq5       # source
     ├── <ALGO>_v<X.YY>.set       # default preset
-    ├── <ALGO>_v<X.YY>.md        # per-version doc (Vietnamese, per koni-ea-ops)
+    ├── <ALGO>_v<X.YY>.md        # per-version doc (English, per koni-ea-ops)
     └── backtest/                # exported MT5 HTML report
 ```
 
@@ -126,6 +126,7 @@ template that does not exist is worse than no directory.
 
 | Content | Location |
 |---|---|
+| Where a bot actually runs (Senti, not the user's MT5) | `docs/RUNNING-ON-SENTI.md` |
 | Why a structural decision was made | `docs/CONTEXT.md` (append-only) |
 | A mistake worth not repeating | `docs/LESSONS.md` |
 | Release history | `docs/CHANGELOG.md` under `[Unreleased]` |
