@@ -17,6 +17,46 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.6.1] — 2026-08-02 — the agile record catches up with the releases — v0.6.1
+
+Nine releases (`0.3.1` → `0.6.0`) had CHANGELOG entries and CONTEXT decisions but **no
+stories**. The koni-docs schema had drifted behind the work it exists to record.
+
+### Added
+- **[EPIC-2](sprints/epics/EPIC-2.md) — "Post-publication corrections: make the public
+  repo true."** EPIC-1 made the repository complete; EPIC-2 made it correct. Every
+  story in it began with a defect found after the work was declared done.
+- **Four stories**, 23 points, each mapped to its shipping commit:
+  [US-2.1](sprints/stories/US-2.1-publish-and-contact-routing.md) publish + contact
+  routing (`136087c`) ·
+  [US-2.2](sprints/stories/US-2.2-verification-actually-verifies.md) the verification
+  tooling actually verifies (`01c0336`) ·
+  [US-2.3](sprints/stories/US-2.3-skills-portable-outside-koniverse.md) skills usable
+  outside Koniverse (`be20ed4`) ·
+  [US-2.4](sprints/stories/US-2.4-senti-is-the-runtime-and-compiler.md) Senti is the
+  runtime and the compiler (`153d359`).
+
+### Changed
+- **[sprint-2026-W31](sprints/sprint-2026-W31.md) records all eight stories.** 42
+  points, 12 releases — not 19 points and 3.
+- **Corrected this sprint's own record.** An earlier revision said the sprint "closed
+  at v0.3.0" and called everything after it a post-sprint follow-up. Tidy, and not
+  true: the sprint window is 2026-07-27 → 2026-08-02 and **all twelve releases landed
+  inside it**, on the final day. Declaring closure mid-day made a mid-sprint scope
+  change look like something else. Stated as a correction rather than silently
+  rewritten, because the earlier version was committed and someone may have read it.
+- `STATUS.md` regenerated — 8 stories.
+
+### Added — the lesson behind the drift
+- **[LESSONS §13](LESSONS.md)** — a gate that validates what exists cannot notice what
+  is missing. The CHANGELOG stayed perfect across all twelve releases because
+  `version-phase` and `changelog-anchor` enforce it. The story record drifted because
+  `story-lint` grades the stories that *exist* and has no opinion about a shipped
+  version with none. The correlation is the mechanism, not a coincidence — and the
+  tell is that quality was uniformly high on exactly the axes the gate measures.
+
+---
+
 ## [0.6.0] — 2026-08-02 — Senti compiles; you never touch MetaEditor — v0.6.0
 
 A correction, and a bigger one than 0.5.0. Through 0.5.0 the docs said: compile in

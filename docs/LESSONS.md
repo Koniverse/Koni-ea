@@ -502,3 +502,64 @@ of setup, and the people it turns away never file a bug about it.
 Sibling of [§11](#11-name-a-product-by-its-destination-not-by-its-toolchain) — that
 entry got the destination wrong, this one got the *route* wrong, and both came from
 reasoning about the toolchain instead of looking at the product.
+
+---
+
+## 13. A gate that validates what exists cannot notice what is missing
+
+**What happened (v0.6.1)**: Twelve releases shipped in one session. Every one had a
+`VERSION` bump, a CHANGELOG entry, and where a decision was made, a CONTEXT entry.
+That discipline held perfectly — because a gate enforces it: `version-phase` blocks a
+bump without a matching changelog section, `changelog-anchor` blocks a missing anchor.
+
+Four of those twelve had a story. The other eight did not, and nothing complained.
+
+`story-lint` runs on every release commit and is thorough: mandatory frontmatter keys,
+Fibonacci points, the id matching the filename, the sprint existing and not having
+ended before the story was created, a real commit SHA, a `Lessons applied:` line. It
+validates **every story file that exists**. It has no opinion about a shipped version
+with no story file at all.
+
+So the agile record degraded silently in the one direction the gate is blind to, while
+the parts the gate watches stayed perfect for twelve consecutive releases. The
+correlation is not a coincidence — it is the whole mechanism.
+
+**Why**: gates are written against the failure the author had just experienced. The
+motivating incident for `story-lint` was *badly-written stories* (8 shipped without
+`points:`, 12 filed into a closed sprint), so it grades quality. Nobody had yet been
+burned by *absent* stories, so absence went unchecked.
+
+Presence checks are also harder, which is the second half of the reason. Validating a
+file you can see is local; noticing a file that should exist means knowing what
+"should" is — here, joining the CHANGELOG's version list against the stories'
+`version_shipped` values. That is a real query, and it never got written.
+
+The tell: **when quality is uniformly high on the axes a gate measures, ask what it
+does not measure.** Uniform excellence is more often evidence of a narrow instrument
+than of uniform care.
+
+**How to avoid**:
+- For every gate, write down the failure it *cannot* see. `story-lint` cannot see a
+  missing story; `credential-scan` cannot see a secret nobody staged; `lesson-capture`
+  cannot see a shallow lesson, only a missing one.
+- **Prefer a cheap completeness query to a thorough quality check** when both cannot
+  be had. `comm -13` over two sorted lists surfaces the candidates:
+  ```bash
+  # shipped versions that no story claims
+  grep -oE '^## \[[0-9]+\.[0-9]+\.[0-9]+\]' docs/CHANGELOG.md | tr -d '#[] ' | sort -u > /tmp/shipped
+  grep -h '^version_shipped:' docs/sprints/stories/*.md | awk '{print $2}' | sort -u > /tmp/storied
+  comm -13 /tmp/storied /tmp/shipped
+  ```
+  **Read the output; do not gate on it.** Run against this repo it names six versions,
+  and every one is a false positive: `version_shipped` records the version a story
+  *closed at*, so a story spanning `0.3.1` → `0.3.5` claims only the last, and a
+  docs-only bookkeeping release legitimately has no story at all.
+
+  That is the honest shape of a completeness query — it is a **prompt to look**, not a
+  verdict, and shipping it as a gate would produce exactly the wall of noise that gets
+  a check disabled ([§5](#5-a-checker-that-reads-documentation-as-data-will-read-its-examples-as-instructions)).
+  Making it precise would mean stories listing every version they cover, which is
+  bookkeeping nobody will maintain. A query you re-read occasionally beats a field
+  that rots.
+- Audit the record when the work is going *well*, not when it is going badly. Drift
+  accumulates fastest during a productive run, because nothing is forcing a pause.
