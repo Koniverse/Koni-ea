@@ -17,6 +17,42 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.3.5] — 2026-08-02 — the repository is public and the security channel works — v0.3.5
+
+### Changed
+- **The repository is public.** `Koniverse/Koni-ea` was private through 0.3.4; every
+  document written since 0.2.0 was written for this moment.
+
+### Fixed
+- **[F-6](tests/findings.md) closed — `/security/advisories/new` no longer 404s.**
+  Private vulnerability reporting is a public-repository feature, so it could not be
+  enabled while the repo was private and the API returned a bare `404` rather than an
+  explanation. Publishing made it available; it is now enabled
+  (`{"enabled":true}`). The form returns a sign-in redirect that resolves back to
+  itself, and `/security`, `/security/policy`, `/discussions`, `/issues` and the three
+  community-health files all resolve.
+
+  This was the only documented channel for **both** security and conduct reports, so
+  until now the private-report path in `SECURITY.md` and `CODE_OF_CONDUCT.md` did not
+  work. It does now.
+
+### Pre-publication sweep
+Publishing is a one-way door — clones and forks outlive any later change of mind — so
+the tree was checked before flipping: 100 tracked files, all text, no binaries or
+archives, no credentials, personal paths, or personal email addresses in tracked
+content. The only `password` matches are the instructions telling reporters *not* to
+paste one. The gitleaks history scan had passed in CI on `f98eacc`.
+
+### Accepted on publication
+Both were known and taken deliberately rather than discovered afterwards:
+- **Commit author metadata is now public.** All commits are authored under a personal
+  address. Rewriting history to change it would invalidate every SHA recorded under
+  RULE-2 in the stories and CHANGELOG.
+- **The template still has not been compiled** ([F-1](tests/findings.md) → F-3).
+  Every document that mentions it says so.
+
+---
+
 ## [0.3.4] — 2026-08-02 — no contact email; everything routes through GitHub — v0.3.4
 
 Partner and user communication moves entirely onto GitHub: issues, discussions, pull
