@@ -18,21 +18,29 @@ uploaded to the user's private catalog.
 
 ### The framing you must never get wrong
 
-**The user's MetaTrader is a build environment. Senti is the runtime.**
+**The user writes MQL5 source. Senti compiles it and runs it.**
 
-A user's local MT5 exists to compile, backtest, and demo-test. Their bot goes live
-when **Senti deploys it**, not when they attach it to a chart. Never tell a user their
-bot is running because it is attached locally, never present "attach to a chart" as
-the final step, and never describe this repo's output as "an EA for MetaTrader" — it
-is a bot for Senti that happens to be written in MQL5.
+They paste `.mq5` into Senti's **Author Studio**, press Compile, press Save as EA, and
+deploy. Senti runs a static safety scan, compiles headlessly on its own build host,
+and builds the preset from the source's `input` defaults.
 
-Two consequences worth stating to a user unprompted:
+Never tell a user they need MetaEditor, an `.ex5`, a `.set` file, or a Windows
+machine. **They need a browser.** A local MetaTrader is optional and only useful for
+running the Strategy Tester themselves.
 
+Three things follow, and they are worth saying unprompted:
+
+- **The bot goes live when Senti deploys it**, never when it is attached to a local
+  chart.
 - **Their machine can be off.** Once deployed, nothing on their computer participates.
-- **Local MT5 stays on a demo account.** The same bot running locally *and* on Senti
-  against one broker account doubles every position and leaves each instance managing
-  trades the other opened. It is silent, and it is the most expensive mistake
-  available here.
+- **Any local MT5 stays on a demo account.** The same bot on their machine *and* on
+  Senti against one broker account doubles every position and leaves each instance
+  managing trades the other opened. Silent, and the most expensive mistake available.
+
+**Code that will not pass the safety scan.** Blocked before compiling: any `#import`;
+every `WebRequest` (the allowlist ships empty, and a non-literal URL is always
+refused); `FileDelete`, `FolderDelete`, `FolderClean`, `FileMove`; `SendFTP`. Do not
+write them into a strategy and do not suggest them — design around the restriction.
 
 Full model: [docs/RUNNING-ON-SENTI.md](docs/RUNNING-ON-SENTI.md).
 
@@ -96,9 +104,9 @@ the `.mq5` are three views of one thing. Change one, change all three.
 
 ### Step 5 — verify before claiming done
 
-The build is done when it compiles, backtests, and survives a demo week — **not when
-it is attached to a chart**. Say so when you hand off; "deploy it on Senti" is the
-last step, and it is the user's to take.
+Your part is done when the source is correct and safety-scan clean. **Compiling is
+Senti's job**, so do not claim the code compiles — say it is ready to paste into
+Author Studio, and that Compile there is the check.
 
 ```bash
 ./scripts/verify.sh
@@ -107,14 +115,13 @@ last step, and it is the user's to take.
 That covers English-only text, link resolution, version identity, handle parity,
 closed-bar reads, and the VERSION/CHANGELOG pairing. Then, by hand:
 
-- Compile in MetaEditor: **zero errors and zero warnings**
 - Walk [`references/mql5-pitfalls.md`](skills/koni-ea-dev/references/mql5-pitfalls.md)
   as a checklist
-- Backtest "Every Tick Based on Real Ticks", ≥ 3 months, report into `backtest/`
+- Confirm the source contains none of the safety-scan blockers listed above
+- Hand off: the user pastes it into Author Studio and presses **Compile**
 
-**You cannot compile MQL5 on macOS or Linux.** MetaEditor is Windows-only. If you
-are running on a non-Windows host, say so plainly rather than claiming the code
-compiles — an unverified compile reported as verified is worse than an honest gap.
+**Do not claim the code compiles.** You have not compiled it — Senti does that, and
+its verdict is the only one that counts.
 
 ---
 
@@ -139,6 +146,8 @@ backtest hides. Full reasoning:
 | Rebuild state after restart | A recompile wipes memory while positions stay open |
 | English everywhere — code, comments, docs, commits | A contributor who cannot read half the repository |
 | The bot runs on **Senti**, not the user's MT5 | A user thinks a chart-attached EA is production: no 24/5, no failover — or worse, it double-trades a Senti deployment on the same account |
+| **Senti compiles**, not the user | A user is told to install MetaEditor and a Windows VM to ship a bot that needs neither |
+| No `#import`, `WebRequest`, destructive file calls, `SendFTP` | The safety scan refuses the code before it ever compiles |
 
 **English has no exceptions here.** Every file in this repository is English:
 source, comments, documentation, issue and PR text, commit messages. An earlier

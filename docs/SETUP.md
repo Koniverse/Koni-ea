@@ -12,16 +12,14 @@ machinery.
 
 | Requirement | Why | Notes |
 |---|---|---|
-| **MetaTrader 5** + MetaEditor | **Build environment** — compile `.mq5` → `.ex5`, backtest, demo-test. Not where your bot runs. | **MetaEditor is Windows-only.** On macOS/Linux use a Windows VM (Parallels, UTM, VirtualBox) or MT5 under Wine / CrossOver. |
-| A **demo** MT5 account | Local testing. **Keep it demo** — never point local MT5 at the account Senti trades. | Any broker. Matching your Senti-linked broker is ideal, so spread and execution behave the same. |
-| `git` | Clone this repo | — |
-| A **Senti account** with a linked broker account | **Runtime** — this is where the finished bot actually runs | Needed at §5. Senti runs the bot on its own terminals against your linked account. |
+| A **Senti account** with a linked broker account | **Everything** — compiling and running both happen here | Author Studio compiles your source; Senti's terminals run the result. |
+| A **browser** | That is the toolchain | No MetaEditor, no `.ex5`, no Windows machine. |
+| `git` | Clone this repo for the template | Or copy the template out of the GitHub UI. |
+| A local **MetaTrader 5** | **Optional.** Only for running the Strategy Tester yourself. | Windows-only, and **not required** to build, compile, or ship. If you run one, keep it on a **demo** account. |
 
-You do **not** need Node, Python, or any build tooling to use the templates. This
-repo is markdown and MQL5 source.
-
-You also do **not** need to keep a machine running. Once Senti deploys your bot, your
-computer plays no part in it — see [RUNNING-ON-SENTI.md](RUNNING-ON-SENTI.md).
+You do **not** need Node, Python, or any build tooling. You do **not** need MetaEditor
+— Senti compiles your source. And once Senti deploys the bot, your computer plays no
+part in running it. See [RUNNING-ON-SENTI.md](RUNNING-ON-SENTI.md).
 
 ---
 
@@ -83,90 +81,72 @@ pitfall checklist on its own.
 
 ---
 
-## 4. Build and test — on your machine
+## 4. Compile on Senti
 
-> **This section is development, not deployment.** Everything here happens in your
-> local MetaTrader, which is a workshop: an editor, a compiler, and a test harness.
-> Your bot is not live at the end of this section. It goes live in §5, when Senti
-> deploys it. See [RUNNING-ON-SENTI.md](RUNNING-ON-SENTI.md).
+> **You do not compile locally.** Senti's Author Studio does it. There is no
+> MetaEditor step and no `.ex5` to produce.
 
-### Load into MetaEditor
+1. Open **Author Studio** in Senti.
+2. **`+ New`** in the DRAFTS panel — each draft is a named version you can keep and
+   come back to.
+3. **Paste your `.mq5`** into the editor.
+4. Press **Compile**.
 
-Copy your `.mq5` into the terminal's data folder so the compiler can resolve
-`<Trade\Trade.mqh>`:
+Senti runs a static safety scan, then a headless MetaEditor compile on its build host.
+Errors and warnings come back as inline markers and a Problems panel, with an **Ask AI
+to fix** action. A release needs **0 errors and 0 warnings** — the panel shows `0E 0W`.
 
-```
-MT5 → File → Open Data Folder → MQL5\Experts\
-```
+### What the safety scan rejects
 
-### Compile
+Blocked **before** the compile runs, and none of it is guessable:
 
-Open the file in MetaEditor and press **F7**. Require **zero errors and zero
-warnings** — an MQL5 warning is usually a real type or scope bug, not style noise.
+| Blocked | Why |
+|---|---|
+| Any `#import` | Loading a DLL or external library is the sandbox escape |
+| `WebRequest` | Rejected outright today (the domain allowlist ships empty), and always rejected when the URL is not a literal string |
+| `FileDelete`, `FolderDelete`, `FolderClean`, `FileMove` | Destructive file operations on a shared host |
+| `SendFTP` | Data exfiltration |
 
-### Load the preset and test it
+The template uses none of them. If your strategy needs a library or a network call,
+design around the restriction — the scan reads the exact source you submit.
 
-Attach the EA to a chart → **Inputs** tab → **Load** → your `.set` file.
+## 5. Save as EA and deploy — where it goes live
+
+Press **Save as EA**. The publish checklist has to be green:
+
+- Generation finished
+- No build running
+- Last compile passed
+- **That build is of the code on screen**
+- EA name set
+
+That fourth item matters more than it looks. Editing the code after a successful
+compile invalidates the build — compile again before saving, or you publish a binary
+that is not the code you are reading.
+
+Saving registers a **private** EA definition plus a preset built from your `input`
+defaults. **You never write a `.set` file**; the defaults in your source become the
+preset.
+
+Then **Deploy** to your linked account. Senti attaches the bot to one of its
+terminals, restarts it if the terminal goes down, and streams ticks, positions and
+equity to your browser. Stop it from the dashboard.
 
 > [!WARNING]
-> **Use a demo account here. Always.**
->
-> This local run is a test, and it must never share a broker account with a bot
-> deployed on Senti. Two instances on one account see the same signal and both act:
-> you get double the position size you configured, and each one manages trades the
-> other opened. Nothing warns you — you find out from the balance. Your real account
-> is linked to Senti and to nothing else.
+> If you also compiled locally to test, **keep that MT5 on a demo account**. The same
+> bot on your machine and on Senti against one broker account doubles every position
+> and leaves each instance managing trades the other opened, silently.
+> [Details](RUNNING-ON-SENTI.md#the-mistake-that-costs-money)
 
-> Change `InpMagicNumber` before running. It must be unique per running instance.
-> MT5 does not enforce this, and two instances sharing a magic will silently manage
-> each other's positions.
+### Optional: backtest it yourself first
 
-### Backtest honestly
+Senti is bringing on-demand backtesting into the platform. Until that ships, running
+the MT5 Strategy Tester yourself is the way to get a backtest — that is the one reason
+to install MetaTrader locally, and it is optional.
 
-Strategy Tester → **"Every Tick Based on Real Ticks"**, minimum 3 months, on the
-timeframe you will actually run. Save the HTML report into `backtest/`.
-
-"Open Prices Only" overstates win rate by 10–15% because intra-bar SL/TP ordering
-is faked. Use it to iterate fast; never to decide.
-
-### Forward-test on demo
-
-Run on a **demo account for at least one full trading week** before real money. A
-backtest cannot show you slippage, requotes, weekend gaps, or how your EA behaves
-across a terminal restart.
-
----
-
-## 5. Deploy to Senti — where it actually runs
-
-**This is the step that makes your bot live.** Not attaching it to a chart in §4.
-
-Senti takes two files:
-
-| File | Where it comes from |
-|---|---|
-| `MY_STRATEGY_v1.00.ex5` | MetaEditor F7 output, in `MQL5\Experts\` |
-| `MY_STRATEGY_v1.00.set` | MT5 Inputs tab → Save |
-
-Upload both. Senti stores the binary and verifies its checksum, then attaches it to
-one of **its** MT5 terminals — running 24/5 in a datacenter near the broker — logged
-into the account you linked. It restarts the bot if the terminal ever goes down, and
-streams ticks, positions and equity to your browser in real time.
-
-Your bot lands in your **private catalog**: only you see it.
-
-**Close MetaTrader on your machine when you are done building.** It has no role in
-running the bot, and leaving a live-account instance attached is the
-[mistake that costs money](RUNNING-ON-SENTI.md#the-mistake-that-costs-money).
-
-Stop the bot from the Senti dashboard, not by closing anything locally.
-
-Walk the pre-flight checklist in
-[templates/mql5/STARTER_EA/README.md](../templates/mql5/STARTER_EA/README.md#before-you-go-live--the-checklist)
-first. Every line on it is a production bug the template already avoids; the point
-is confirming your edits did not reintroduce one.
-
----
+If you do: "Every Tick Based on Real Ticks", at least 3 months, on the timeframe you
+will deploy. "Open Prices Only" overstates win rate by 10-15% because intra-bar SL/TP
+ordering is faked.
 
 ## 6. Setting up to contribute
 

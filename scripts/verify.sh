@@ -8,8 +8,8 @@
 #
 #   ./scripts/verify.sh
 #
-# What it cannot check: whether the MQL5 compiles. MetaEditor is Windows-only.
-# See docs/tests/findings.md F-1.
+# What it cannot check: whether the MQL5 compiles. That happens in Senti's Author
+# Studio, which compiles pasted source on its own build host — paste and press Compile.
 
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -60,6 +60,7 @@ if command -v perl >/dev/null 2>&1; then
             \x{2190}-\x{21FF}   # arrows
             \x{2200}-\x{22FF}   # mathematical operators
             \x{2300}-\x{23FF}   # miscellaneous technical (includes the clock glyphs)
+            \x{2460}-\x{24FF}   # enclosed alphanumerics — circled step numbers
             \x{2500}-\x{257F}   # box drawing
             \x{2580}-\x{259F}   # block elements
             \x{25A0}-\x{25FF}   # geometric shapes
@@ -202,7 +203,7 @@ fi
 echo
 if [ "$fails" -eq 0 ]; then
   printf '%sall checks passed%s\n' "$GREEN" "$OFF"
-  echo "note: the MQL5 compile is NOT checked here — MetaEditor is Windows-only (docs/tests/findings.md F-1)"
+  echo "note: the MQL5 compile is NOT checked here — paste the source into Senti Author Studio and press Compile"
   exit 0
 fi
 printf '%s%d check(s) failed%s\n' "$RED" "$fails" "$OFF"

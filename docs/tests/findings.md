@@ -9,34 +9,6 @@ Close a finding by moving it to **Closed** with the evidence, not by deleting it
 
 ## Open
 
-### F-1 — `STARTER_EA_v1.00.mq5` has never been compiled
-
-| | |
-|---|---|
-| **Severity** | High |
-| **Opened** | 2026-08-02 (v0.2.0) |
-| **Area** | `templates/mql5/STARTER_EA/v1/v1.00/` |
-| **Owner** | unassigned |
-
-The template was written to the koni-ea-dev standard and structurally self-checked
-(version identity holds, 3 indicator handles created and 3 released, no `CopyBuffer`
-reads bar `[0]`). It has **not** been through MetaEditor.
-
-**Why it is open**: MetaEditor is Windows-only; the work was done on macOS. There is
-no cross-platform MQL5 compiler.
-
-**Impact**: A syntax, type, or scope error would block every partner at step one of
-the 6-step loop. The structural checks cannot catch those.
-
-**To close**: MetaEditor F7 on a Windows host. Zero errors **and** zero warnings.
-Record the result in `test-reports/EPIC-01/<MMDDYYYY>/report-manual.md`.
-
-**Mitigation until then**: `AGENTS.md`, [LESSONS §2](../LESSONS.md), and
-[STRATEGY.md](STRATEGY.md) all state that the compile is unverified, so no reader
-should assume otherwise.
-
----
-
 ### F-2 — `STARTER_EA_v1.00.mq5` has never been run on a terminal
 
 | | |
@@ -45,7 +17,6 @@ should assume otherwise.
 | **Opened** | 2026-08-02 (v0.2.0) |
 | **Area** | `templates/mql5/STARTER_EA/v1/v1.00/` |
 | **Owner** | unassigned |
-| **Blocked by** | F-1 |
 
 No runtime behaviour has been observed. Specifically unverified: the `[INIT]`
 startup line appears in the Journal; input validation rejects a bad
@@ -65,7 +36,6 @@ output. Record in the same report as F-1.
 | **Opened** | 2026-08-02 (v0.2.0) |
 | **Area** | `templates/mql5/STARTER_EA/v1/v1.00/backtest/` |
 | **Owner** | unassigned |
-| **Blocked by** | F-1 |
 
 `backtest/` is empty. Per koni-ea-ops, a released version ships an exported MT5 HTML
 report from "Every Tick Based on Real Ticks", ≥3 months.
@@ -193,6 +163,37 @@ Vietnamese in parentheses so the provenance of the quote survives. Then re-run
 ---
 
 ## Closed
+
+### F-1 — `STARTER_EA_v1.00.mq5` had never been compiled
+
+| | |
+|---|---|
+| **Severity** | High |
+| **Opened** | 2026-08-02 (v0.2.0) |
+| **Closed** | 2026-08-02 (v0.6.0) |
+| **Area** | `templates/mql5/STARTER_EA/v1/v1.00/` |
+
+The template was written to the koni-ea-dev standard and structurally self-checked,
+but had never been through a compiler. It was recorded as an open gap rather than
+claimed, because MetaEditor is Windows-only and the work was done on macOS.
+
+**Closed by**: the operator pasting the template into **Senti Author Studio** and
+pressing Compile.
+
+**Evidence**: `Compiled cleanly — 0 errors, 0 warnings`. The Problems panel shows the
+full include resolution through `Trade\Trade.mqh`, and the COMPILE panel reports
+`This version — 0E 0W`. The publish checklist passed 5/5, so the build is registrable
+as an EA.
+
+**What this also corrected**: the premise behind the finding. The template does not
+need a local MetaEditor at all — Senti compiles pasted source on its own build host.
+The "Windows-only, use a VM" framing in the docs was an invented barrier, removed in
+v0.6.0.
+
+**F-2 and F-3 are no longer blocked by this.** Both were waiting on a compile that has
+now happened; they now depend only on someone running the bot and a backtest.
+
+---
 
 ### F-6 — Private vulnerability reporting was unavailable on a private repository
 

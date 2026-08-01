@@ -17,6 +17,53 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.6.0] — 2026-08-02 — Senti compiles; you never touch MetaEditor — v0.6.0
+
+A correction, and a bigger one than 0.5.0. Through 0.5.0 the docs said: compile in
+MetaEditor with F7, upload the `.ex5` and `.set`, and — for macOS and Linux users —
+install a Windows VM first.
+
+**None of that is what a user does.** Senti has an **Author Studio**: paste `.mq5`
+source into a web editor, press **Compile**, press **Save as EA**. Senti runs a static
+safety scan, compiles headlessly on its own build host, and builds the preset from the
+source's `input` defaults. No MetaEditor, no binary, no `.set` file, **no Windows
+machine**. The prerequisite the docs invented was the largest barrier in them, and it
+did not exist.
+
+### Changed
+- **README, `SETUP.md`, the template README, `AGENTS.md`, and both skills** rewritten
+  around the four-step Author Studio flow: `+ New` → paste → Compile → Save as EA →
+  Deploy.
+- **`SETUP.md` §4 is now "Compile on Senti"**; §5 is "Save as EA and deploy".
+  Prerequisites drop MetaEditor to *optional* — a browser and a Senti account are the
+  toolchain.
+- **Local MetaTrader is documented as optional**, useful only for running the Strategy
+  Tester yourself. Senti is bringing on-demand backtesting into the platform.
+
+### Added
+- **The safety scan is documented** — in `RUNNING-ON-SENTI.md`, `SETUP.md`, the
+  template checklist, `AGENTS.md`, and `koni-ea-dev`. Blocked before compiling: any
+  `#import`; every `WebRequest` (the domain allowlist ships empty, and a non-literal
+  URL is always refused); `FileDelete`, `FolderDelete`, `FolderClean`, `FileMove`;
+  `SendFTP`. None of it is guessable, and hitting it is a refusal rather than a
+  compile error.
+- **The publish checklist's fourth item explained** — *"that build is of the code on
+  screen"* means editing after a successful compile invalidates the build. Compile
+  again before saving, or publish a binary that is not the code you are reading.
+
+### Fixed
+- **[F-1](tests/findings.md) closed.** The template compiled in Author Studio with
+  **0 errors, 0 warnings** on the first attempt. It had been open for four versions
+  on the premise that compiling it required a Windows host — a premise this release
+  removes. F-2 and F-3 are no longer blocked by it.
+
+Recorded as [LESSONS §12](LESSONS.md) — architecture docs describe capabilities and
+rarely say which one a user actually touches. A screenshot of the UI answered in
+seconds what an hour of reading specs did not, and the reading was not wrong: the
+upload path is real, it is just the *admin* path.
+
+---
+
 ## [0.5.0] — 2026-08-02 — the bot runs on Senti, not on your MetaTrader — v0.5.0
 
 A positioning correction, and it is not cosmetic. Through 0.4.0 the README opened

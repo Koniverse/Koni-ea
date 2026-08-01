@@ -25,13 +25,22 @@ description: >
 
 ## What you are building, and where it runs
 
-An EA written to this standard is **deployed on Senti**, a platform that runs it on
-its own MT5 terminals — 24/5, in a datacenter near the broker, logged into the
-account the user linked. The author's local MetaTrader is a **build environment**:
-compile, backtest, demo-test. It is not the runtime.
+An EA written to this standard is **compiled and run by Senti**. The author pastes
+`.mq5` source into Senti's Author Studio, presses Compile, presses Save as EA, and
+deploys it to a linked broker account. Senti runs it on its own MT5 terminals — 24/5,
+in a datacenter near the broker.
 
-Two things follow that change how you write the code:
+**The author does not need MetaEditor, an `.ex5`, a `.set` file, or a Windows
+machine.** Do not tell them otherwise. A local MetaTrader is optional and useful only
+for running the Strategy Tester.
 
+Three things follow that change how you write the code:
+
+- **Senti runs a static safety scan before compiling.** It blocks any `#import`, every
+  `WebRequest` (the domain allowlist ships empty, and a non-literal URL is always
+  refused), the destructive file calls `FileDelete` / `FolderDelete` / `FolderClean` /
+  `FileMove`, and `SendFTP`. Never write these into a strategy; design around the
+  restriction rather than trying to slip past it.
 - **It must survive a restart.** Senti restarts terminals after crashes, node reboots,
   and maintenance. The EA has to rebuild in-flight state from open positions and
   GlobalVariables — see [self-recovery](references/mql5-pitfalls.md#self-recovery-after-restart).
@@ -39,8 +48,11 @@ Two things follow that change how you write the code:
 - **It runs unattended.** Nobody is watching the chart. Every block, skip, and refusal
   needs a `PrintFormat` with a bracketed tag, because the Journal is the only witness.
 
-Never tell an author their bot is live because it is attached to a chart locally. It
-is live when Senti deploys it.
+**The `input` defaults are the deployed preset.** Senti builds it from the source on
+save, so a careless default ships as a live parameter.
+
+Never claim the code compiles — you have not compiled it. Say it is ready to paste
+into Author Studio; Compile there is the verdict.
 
 ## Start from the template, not a blank file
 

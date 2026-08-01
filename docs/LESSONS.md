@@ -453,3 +453,52 @@ had changed two versions earlier, in files nobody re-read because the decision f
 other direction: there the sweep reached too far, here it did not reach far enough.
 
 See [RUNNING-ON-SENTI.md](RUNNING-ON-SENTI.md).
+
+---
+
+## 12. Read the product's UI, not only its architecture docs
+
+**What happened (v0.6.0)**: v0.5.0 documented the deployment path as *"compile in
+MetaEditor with F7, then upload the `.ex5` and `.set` to Senti."* Requirements told
+macOS and Linux users to install a Windows VM. `SETUP.md` had a whole section on
+resolving include paths in MetaEditor.
+
+None of that is what a user does. Senti has an **Author Studio**: paste `.mq5` source
+into a web editor, press **Compile**, press **Save as EA**. Senti runs the safety scan,
+compiles headlessly on its own build host, and builds the preset from the source's
+`input` defaults. No MetaEditor, no binary, no `.set` file, **no Windows machine**.
+
+The correction arrived as a screenshot. It also closed [F-1](tests/findings.md) — the
+template compiled `0 errors, 0 warnings` on the first try, a gap that had been open
+for four versions because compiling it was supposedly impossible.
+
+**Why**: the architecture docs were read, and they were right — `FR-85` (upload
+`.ex5` + `.set`) is real, and the compile service is described exactly as
+implemented. What the reading missed is that `FR-85` is the **admin** path. The
+user-facing path is a *different* epic, and the sentence that would have said so was
+one line in a table of 175 requirements.
+
+Architecture docs describe **capabilities**. They rarely say which one a user actually
+touches, because to the team that wrote them it is obvious. A screenshot of the UI
+answers in seconds what an hour of reading specs did not.
+
+The failure compounds in one direction: an invented prerequisite is not a small
+inaccuracy. "You need a Windows VM to build a bot" turns a browser tab into a weekend
+of setup, and the people it turns away never file a bug about it.
+
+**How to avoid**:
+- **Ask to see the screen** before documenting a user-facing flow. One screenshot
+  outranks a specification, because the specification describes what is possible and
+  the screen shows what is offered.
+- When architecture names several paths to the same outcome, **find out which one is
+  in the product's navigation.** "Supported" and "what a user does" are different
+  questions.
+- **Be most suspicious of prerequisites you are adding.** Every "you will need X"
+  raises the cost of entry; verify each against the actual product, not against the
+  toolchain you happened to be reasoning about.
+- A capability marked *in progress* in a spec may already be shipped in the UI, and
+  vice versa. The spec is a plan; the screen is the state.
+
+Sibling of [§11](#11-name-a-product-by-its-destination-not-by-its-toolchain) — that
+entry got the destination wrong, this one got the *route* wrong, and both came from
+reasoning about the toolchain instead of looking at the product.

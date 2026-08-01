@@ -3,9 +3,9 @@
 The reference skeleton for a trading bot you deploy on **Senti**. Copy it, replace
 one function, ship.
 
-> **Your bot runs on Senti, not on your MetaTrader.** MT5 on your machine compiles and
-> tests it; Senti runs it, on Senti's terminals, against your linked broker account,
-> whether your computer is on or not.
+> **You write MQL5 source; Senti compiles it and runs it.** No MetaEditor, no `.ex5`,
+> no `.set` file, no Windows machine — paste the source into Senti's Author Studio,
+> press Compile, press Save as EA.
 > [Read this first →](../../../docs/RUNNING-ON-SENTI.md)
 
 > **This is a structure, not a strategy.** Every lifecycle, risk and safety
@@ -79,18 +79,31 @@ Everything else is configuration, not code. Adjust `InpAtrSLMult`, `InpRR`,
 - **Keep the `.set` and the doc's input table in sync.** They are part of the
   released artifact.
 
-### 5. Compile clean
+### 5. Compile in Senti
 
-Open in MetaEditor → F7. **Zero errors and zero warnings.** A warning in MQL5 is
-usually a real type or scope bug, not style noise.
+Open **Author Studio**, press **`+ New`**, paste your `.mq5`, press **Compile**.
 
-### 6. Backtest honestly
+Senti runs a static safety scan, then a headless MetaEditor compile on its build host.
+Aim for **0 errors and 0 warnings** — a warning in MQL5 is usually a real type or
+scope bug, not style noise. Errors arrive as inline markers with an **Ask AI to fix**
+action.
 
-Strategy Tester → **"Every Tick Based on Real Ticks"**, minimum 3 months, on the
-timeframe you will actually run. Export the HTML report into `backtest/`.
+The safety scan blocks any `#import`, every `WebRequest`, the destructive file calls
+(`FileDelete`, `FolderDelete`, `FolderClean`, `FileMove`), and `SendFTP`. This template
+uses none of them; if you add a library or a network call, expect a refusal.
 
-"Open Prices Only" overstates win rate by 10–15% because intra-bar SL/TP ordering
-is faked. Use it to iterate fast, never to decide.
+### 6. Save as EA, then deploy
+
+Press **Save as EA**. The publish checklist must be green — and note the item *"that
+build is of the code on screen"*: editing after a successful compile invalidates the
+build, so compile again before saving.
+
+Senti registers a **private** EA plus a preset built from your `input` defaults. **You
+never write a `.set` file.** Then deploy it to your linked account.
+
+Backtesting is optional and separate. Senti is bringing it into the platform; until
+then, a local MT5 Strategy Tester run ("Every Tick Based on Real Ticks", at least 3
+months) is the way to get one, and its report goes in `backtest/`.
 
 ## Before you go live — the checklist
 
@@ -102,43 +115,35 @@ template already avoids; the point is to confirm your edits did not reintroduce 
 - [ ] `InpMagicNumber > 0` and unused by any other running instance
 - [ ] `Signal()` reads `[1]`/`[2]` only — grep the file for `, 0,` in `CopyBuffer` calls
 - [ ] Every new indicator handle is checked in `OnInit` and released in `OnDeinit`
-- [ ] Compiles with zero errors **and** zero warnings
-- [ ] Backtested "Every Tick Based on Real Ticks", ≥ 3 months, report saved in `backtest/`
+- [ ] No `#import`, no `WebRequest`, no `FileDelete`/`FolderDelete`/`FolderClean`/`FileMove`, no `SendFTP` — the safety scan blocks all of them
+- [ ] Compiles in Author Studio with **0 errors and 0 warnings**
+- [ ] You compiled **after** your last edit, so the saved build is the code on screen
+- [ ] The `input` defaults are what you actually want — they become the Senti preset
 - [ ] Tested on a **demo** account for at least one full trading week
-- [ ] The `.set` file matches the input table in the `.md`
 - [ ] You have read the risk warning and accept that you own the outcome
-- [ ] **You understand the bot goes live when Senti deploys it** — not when you attach
-      it to a chart on your own machine
-- [ ] **Your local MT5 is on a demo account**, and will stay that way once the bot is
-      deployed on Senti
+- [ ] **Your local MT5, if you run one, is on a demo account** and stays that way
 
-## Deploying to Senti — the step that makes it live
-
-Steps 1-6 above all happen on your machine. **None of them puts your bot in
-production.** It goes live here.
+## The whole path
 
 ```
-YOUR MACHINE                          SENTI
-  MetaEditor F7 → .ex5                  stores + checksums the binary
-  MT5 Inputs tab → .set                 attaches it to a terminal, 24/5
-        │                               logged into YOUR linked account
-        └── upload both ──────────────▶ restarts it if the node goes down
-                                        streams ticks/positions to your browser
+YOU                            SENTI — Author Studio
+  edit Signal()                  1. + New draft
+  copy the .mq5                  2. paste -> Compile   (safety scan -> MetaEditor -> 0E 0W)
+        |                        3. Save as EA         (private EA + preset from your inputs)
+        +-- paste source ------> 4. Deploy             (Senti terminal, 24/5, your account)
 ```
 
-The bot lands in your **private catalog** — only you see it — and deploys to your
-linked account through the same path as platform bots. Stop it from the Senti
-dashboard.
+Source is the only thing that crosses the line. The bot lands in your **private
+catalog** — only you see it. Stop it from the Senti dashboard.
 
 > [!WARNING]
-> After uploading, **detach the EA from your local chart** — or keep local MT5 on a
-> demo account permanently. Two instances against one broker account both act on the
-> same signal: double the size you configured, each managing the other's trades, and
-> no warning. [Details](../../../docs/RUNNING-ON-SENTI.md#the-mistake-that-costs-money)
+> If you also compiled locally to test, **keep that MT5 on a demo account**. Two
+> instances against one broker account both act on the same signal: double the size
+> you configured, each managing the other's trades, and no warning.
+> [Details](../../../docs/RUNNING-ON-SENTI.md#the-mistake-that-costs-money)
 
-The `.ex5` is a build artifact and is gitignored on purpose — commit the `.mq5`
-source and compile per release, so what you ship is always reproducible from what
-you committed.
+`.ex5` files are gitignored on purpose — the `.mq5` source is the artifact, and Senti
+compiles it. What ships is always reproducible from what you committed.
 
 ## Going deeper
 

@@ -34,11 +34,17 @@ shipped, never how their logic is written.
 > and [`deployment.md`](references/deployment.md). The rules those tools enforce are
 > the standard; the tools are not.
 
-**The destination is Senti, not a desktop terminal.** A released EA is uploaded as
-`.ex5` + `.set` and run by Senti on its own MT5 terminals against the author's linked
-broker account. That is what "deploy" means throughout this skill. Attaching an EA to
-a local chart is testing, never release — and doing it against an account Senti is
-already trading doubles every position.
+**The destination is Senti, and Senti does the compiling.** A release is `.mq5`
+**source** pasted into Senti's Author Studio: safety scan, headless compile, Save as
+EA, deploy to a linked account. Senti produces and stores the `.ex5` and builds the
+preset from the source's `input` defaults — the author never handles a binary or
+writes a `.set`.
+
+That is what "deploy" means throughout this skill. Sections below describing a local
+MetaEditor compile or an uploaded binary describe the **Koniverse-internal** release
+path, not what a partner does. Attaching an EA to a local chart is testing, never
+release — and doing it against an account Senti already trades doubles every
+position.
 
 A working template that already follows this layout — `.mq5` + `.set` + per-version
 doc + `backtest/` under `<ALGO>/v<major>/v<X.YY>/` — is at
