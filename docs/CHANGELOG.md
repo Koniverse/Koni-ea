@@ -17,13 +17,63 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.3.4] — 2026-08-02 — no contact email; everything routes through GitHub — v0.3.4
+
+Partner and user communication moves entirely onto GitHub: issues, discussions, pull
+requests, and private advisories. No published address ([D6](CONTEXT.md)).
+
+### Removed
+- **Every contact email.** A published address is harvested for spam within days of a
+  repository going public and gives a reporter no confirmation that a human read the
+  message. It is also the wrong shape for a partner channel: an inbox is invisible to
+  everyone except the two people in it, so the same questions get answered privately,
+  over and over.
+
+### Changed
+- **`SUPPORT.md` is now a routing table.** Question or idea → Discussions. Defect →
+  Issue. Change you already wrote → pull request. Security → private advisory.
+  Conduct → private advisory titled `Code of Conduct`. Each row states why that
+  channel and not another.
+- **`SECURITY.md`** routes exclusively to
+  [GitHub private security advisories](https://github.com/Koniverse/Koni-ea/security/advisories/new).
+- **`CODE_OF_CONDUCT.md`** routes conduct reports to the same private advisory form,
+  and additionally to GitHub's own abuse reporting — a route that works even when a
+  maintainer is the subject of the report. A public issue is explicitly the wrong
+  venue for both: it exposes a reporter to the person they are reporting.
+- **Added a partner section** to `SUPPORT.md` explaining what a public issue buys
+  that a private message cannot — a record attached to the change, one answer serving
+  every partner, and a visible status.
+
+### Fixed
+- **GitHub Discussions enabled on the repository.** `SUPPORT.md` and the issue
+  templates had linked to it since 0.3.0; the feature was off, so every one of those
+  links was a 404.
+
+### Redacted
+- Three mentions of an address inside `docs/CHANGELOG.md` and `docs/LESSONS.md` —
+  append-only files — were removed **with a visible marker** naming the date and
+  pointing at [D6](CONTEXT.md). A narrow, deliberate exception to RULE-7: append-only
+  protects reasoning from quiet revision, and a redaction that announces itself
+  preserves that contract while removing a personal identifier from a public file.
+  Silent redaction would have been the violation.
+
+### Known gap
+- **[F-6](tests/findings.md)** — private vulnerability reporting is a
+  public-repository feature and returns 404 while this repo is private. The documented
+  security and conduct channel will not work until it is enabled, which makes enabling
+  it a **publication step**, not a backlog item.
+
+---
+
 ## [0.3.3] — 2026-08-02 — the public contact address is organizational, not personal — v0.3.3
 
 ### Fixed
 - **`CODE_OF_CONDUCT.md` and `SECURITY.md` listed the operator's personal email** as
   the project's contact point for conduct complaints and private security reports.
   The address came from the working session's ambient context and was never
-  authorized for publication. Replaced with **partners@koni.studio**.
+  authorized for publication. Replaced with an organizational address —
+  itself removed in 0.3.4, which drops every contact email in favour of GitHub
+  issues and private advisories. *(Address redacted 2026-08-02; see D6.)*
 
 Recorded as [LESSONS §8](LESSONS.md) — context an agent is given is not content it may
 publish. The value was correct and already at hand, which is exactly what made it read
@@ -31,7 +81,8 @@ as a lookup rather than as the publishing decision it was.
 
 ### Known gap
 - **Commit author metadata still carries a personal email.** All commits to date were
-  authored as `jindo9986@gmail.com`. Editing a file cannot change this; it lives in
+  authored under a personal address *(redacted 2026-08-02; see D6)*. Editing a file
+  cannot change this; it lives in
   each commit object. Changing it for existing commits means rewriting history, which
   would invalidate every SHA recorded under RULE-2 in the story files and CHANGELOG.
   Left for an explicit decision rather than actioned unilaterally.

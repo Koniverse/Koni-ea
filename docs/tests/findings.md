@@ -80,6 +80,45 @@ per-version doc that it is a mechanical check rather than a performance claim.
 
 ---
 
+### F-6 — Private vulnerability reporting is not enabled, and cannot be while the repo is private
+
+| | |
+|---|---|
+| **Severity** | Medium — blocks the documented security channel |
+| **Opened** | 2026-08-02 (v0.3.4) |
+| **Area** | repository settings |
+| **Owner** | unassigned |
+
+[SECURITY.md](../../SECURITY.md) and [CODE_OF_CONDUCT.md](../../CODE_OF_CONDUCT.md)
+both route reports to
+`https://github.com/Koniverse/Koni-ea/security/advisories/new`. That form requires
+**private vulnerability reporting** to be enabled, and the GitHub API returns `404`
+for it today:
+
+```
+gh api -X PUT repos/Koniverse/Koni-ea/private-vulnerability-reporting
+{"message":"Not Found","status":"404"}
+```
+
+**Why it is open**: private vulnerability reporting is a **public-repository
+feature**. This repository is private, so there is nothing to enable and no external
+reporter who could use it. The documentation is correct for the state the repository
+is being prepared for, not the state it is in.
+
+**Impact while open**: none in practice — a private repo has no outside reporters. It
+becomes real the moment the repo is published with the feature still off, because the
+only documented security and conduct channel would 404.
+
+**To close**: on publication, run
+`gh api -X PUT repos/Koniverse/Koni-ea/private-vulnerability-reporting`
+(or Settings → Security → Private vulnerability reporting → Enable), then open the
+advisory URL once to confirm the form renders.
+
+**This is a publication-step dependency, not a backlog item.** Going public without
+it ships a `SECURITY.md` that does not work.
+
+---
+
 ### F-5 — A vendored gate file carries a Vietnamese comment into this English repo
 
 | | |

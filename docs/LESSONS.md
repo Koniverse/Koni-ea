@@ -285,7 +285,9 @@ See [CONTEXT.md D5](CONTEXT.md), [tests/findings.md](tests/findings.md).
 address for private reports. The working session carried the operator's email in its
 ambient context, so that address went into both files as the project's public contact
 point. Nobody asked for it and nobody was asked about it. The operator caught it on
-review: the right address was an organizational one, `partners@koni.studio`.
+review: the right address was an organizational one. *(That address was itself
+removed in v0.3.4 — the project now publishes no contact email at all. Redacted here
+2026-08-02; see [CONTEXT D6](CONTEXT.md).)*
 
 **Why**: The failure is subtle because the information was not *wrong* and not
 *obtained improperly* — it was correct, it was already there, and it filled a real

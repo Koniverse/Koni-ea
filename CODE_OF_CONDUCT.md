@@ -69,9 +69,26 @@ account, or acting as an appointed representative at an online or offline event.
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported
-to the community leaders responsible for enforcement at
-**partners@koni.studio**.
+Report abusive, harassing, or otherwise unacceptable behavior through
+**[GitHub's private advisory form](https://github.com/Koniverse/Koni-ea/security/advisories/new)**.
+
+That form is labelled for security, and we use it for conduct reports too, for one
+reason: it is the only channel on this repository that is **private between you and
+the maintainers**. Open the form, title it `Code of Conduct`, and describe what
+happened. Nothing you write there is public unless we publish it.
+
+**Do not open a public issue or discussion for a conduct report.** Doing so exposes
+you to the person you are reporting, before anyone has looked at it.
+
+If the behavior violates
+[GitHub's own policies](https://docs.github.com/site-policy/acceptable-use-policies/github-acceptable-use-policies)
+— harassment, threats, spam — you can also report it directly to GitHub at
+[github.com/contact/report-abuse](https://github.com/contact/report-abuse). That
+route works even if a maintainer is the subject of the report.
+
+This project publishes no contact email. An address in a public repository collects
+spam and gives a reporter no confirmation that a human saw the message; the advisory
+form gives you a thread, a record, and a reply.
 
 All complaints will be reviewed and investigated promptly and fairly. All community
 leaders are obligated to respect the privacy and security of the reporter of any

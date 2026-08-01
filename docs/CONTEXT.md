@@ -226,3 +226,70 @@ are correct in substance, only stale in casing.
 **Date**: 2026-08-02
 **Version**: 0.3.1
 **Reference**: [D1](#d1-the-ea-skills-live-here-not-in-koni-skills--and-there-is-only-one-copy), [D4](#d4-english-everywhere-enforced--the-vietnamese-carve-out-does-not-survive-going-public), [LESSONS §4](LESSONS.md).
+
+---
+
+### D6. No contact email anywhere — and a PII carve-out from the append-only rule
+
+**Context**: `CODE_OF_CONDUCT.md` and `SECURITY.md` carried a contact address. Two
+problems with that in a public repository. A published address is harvested for spam
+within days of the repo going public, and it gives a reporter no confirmation that a
+human ever read the message — no thread, no status, no record. For partners and users
+it is also the wrong shape of channel: an inbox is invisible to everyone except the
+two people in it, so the same twenty questions get answered privately, twenty times.
+
+Removing the address is easy for support questions — they become issues. It is not
+obvious for the two channels that **must** stay private: a security report and a
+conduct report. Telling someone to open a public issue about a vulnerability
+publishes the vulnerability; telling someone to open a public issue about harassment
+exposes them to the person they are reporting.
+
+**Decision**: Publish **no contact email at all**. Route every channel through GitHub:
+
+- Questions and ideas → Discussions (enabled on the repository as part of this change)
+- Defects → Issues, via the templates
+- Changes → Pull requests
+- **Security reports → GitHub private security advisories**
+- **Conduct reports → the same private advisory form, titled `Code of Conduct`**, plus
+  GitHub's own abuse reporting for anything that also violates GitHub policy — that
+  route works even when a maintainer is the subject
+
+The advisory form is labelled for security and is being used for conduct too, on
+purpose: it is the only channel on this repository that is private between a reporter
+and the maintainers, and it gives the reporter a thread and a reply rather than
+silence.
+
+**The append-only carve-out**: three mentions of an address survived inside
+`docs/CHANGELOG.md` and `docs/LESSONS.md` — files that are append-only and already
+committed. They were **redacted in place**, each with a visible marker naming the date
+and pointing here.
+
+That is a deliberate exception to RULE-7 and it is narrow. Append-only exists so a
+reader can trust that the *reasoning* in a past entry has not been quietly revised.
+Removing a personal identifier changes no reasoning; leaving one in a public file
+defeats the entire purpose of this decision, in the one place nobody thinks to look.
+The redaction announces itself precisely so the contract survives: a reader sees that
+something was removed, when, and why, rather than finding a sentence that reads as
+though it was always written that way. Silent redaction would be the violation. This
+is not.
+
+**Rationale for the shape of the routing**: the alternatives were worse. *Keep an
+address for the private channels only* — still harvested, still no reply guarantee,
+and it splits the workflow across two systems. *Route conduct reports to a public
+issue* — actively harmful. *Provide no private channel at all* — makes responsible
+disclosure impossible and would be dishonest in a `SECURITY.md`.
+
+**Impact**: `CODE_OF_CONDUCT.md`, `SECURITY.md`, `SUPPORT.md` rewritten around GitHub
+channels; Discussions enabled on the repository (the previous links to it were 404,
+having been written before the feature was turned on). Three redactions in append-only
+files. `.active-context.example.md` keeps `you@example.com` — a placeholder in a local
+developer template, not a contact address.
+
+**Not yet possible**: GitHub private vulnerability reporting is a **public-repository
+feature** and returns 404 while this repo is private. `SECURITY.md` points at the
+advisory URL, which will work the moment the repo is published. Enabling it is a
+publication step — tracked as [F-6](tests/findings.md).
+
+**Date**: 2026-08-02
+**Version**: 0.3.4
+**Reference**: [LESSONS §8](LESSONS.md), [D4](#d4-english-everywhere-enforced--the-vietnamese-carve-out-does-not-survive-going-public), [F-6](tests/findings.md).

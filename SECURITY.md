@@ -2,11 +2,16 @@
 
 ## Reporting a vulnerability
 
-**Do not open a public issue for a security problem.**
+**Do not open a public issue for a security problem.** A public issue tells everyone
+about the flaw at the same moment it tells us, including people who would use it.
 
-Report it privately through
-[GitHub Security Advisories](https://github.com/Koniverse/Koni-ea/security/advisories/new),
-or by email to **partners@koni.studio** with `[SECURITY]` in the subject.
+Report it through
+**[GitHub private security advisories](https://github.com/Koniverse/Koni-ea/security/advisories/new)**.
+
+The form is private: only you and the maintainers can see it, discussion happens in
+the advisory thread, and it becomes public only when we publish it — normally after a
+fix is out and with credit to you. There is no email address to write to, by design;
+a published address collects spam and gives you no confirmation that anyone read it.
 
 Include what you found, how to reproduce it, and what an attacker gains. A proof of
 concept helps; a working exploit against someone else's account does not — do not
