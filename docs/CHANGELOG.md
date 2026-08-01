@@ -17,6 +17,33 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.3.6] — 2026-08-02 — five gate checks were never running — v0.3.6
+
+### Fixed
+- **[F-7](tests/findings.md) — the commit gate was enforcing less than half of what it
+  is configured to enforce.** `install-gate.sh` writes a pre-commit hook hardcoded to
+  `--phase work-commit`, and nothing ever invokes `--phase release-commit`, so
+  `story-lint`, `changelog-anchor`, `lesson-capture`, `design-first` and
+  `koni-docs-validate` never fired on their own. They had been run by hand during
+  setup, which is exactly why nobody noticed.
+
+  `story-lint` and `changelog-anchor` are stateless, so they now run inside
+  `scripts/verify.sh` where CI executes them on every push and pull request. The local
+  hook now invokes both phases.
+
+  **Still open**: `lesson-capture` and `design-first` read `git diff --cached`, so they
+  only work in a hook — and hooks are not committed. A fresh clone still gets neither,
+  even after `install-gate.sh`. The durable fix belongs upstream in `Koni-Skills`.
+
+### Added
+- **[LESSONS §9](LESSONS.md)** — do not document a channel until you have opened it.
+  `SECURITY.md` routed vulnerability reports to a URL that returned 404 for five
+  versions, and `CODE_OF_CONDUCT.md` joined it in 0.3.4 when the last contact email
+  was removed. A documented channel is a promise, not a claim: a wrong claim is found
+  by anyone who checks, a broken channel is found only by someone already in trouble.
+
+---
+
 ## [0.3.5] — 2026-08-02 — the repository is public and the security channel works — v0.3.5
 
 ### Changed

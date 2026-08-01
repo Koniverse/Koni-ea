@@ -165,7 +165,29 @@ else
   pass "VERSION $ver has a CHANGELOG section"
 fi
 
-# ------------------------------------------------------------------ 6. koni-docs
+# ------------------------------------------------------- 6. release-phase gate checks
+# The koni-harness pre-commit hook is hardcoded to `--phase work-commit`, so every
+# check configured for `release-commit` in .koni-harness/gates.conf never fires on its
+# own. Two of them are stateless — they read files, not the staged diff — so they run
+# here, where CI executes them on every push and pull request.
+#
+# lesson-capture and design-first are NOT here: both inspect `git diff --cached`, which
+# is empty in CI and meaningless outside a commit. They need the git hook. See F-7.
+for chk in story-lint changelog-anchor; do
+  script=".koni-harness/checks/$chk.sh"
+  if [ ! -x "$script" ] && [ ! -f "$script" ]; then
+    skip "$chk" "gate not installed"
+    continue
+  fi
+  if out=$(sh "$script" 2>&1); then
+    pass "$chk"
+  else
+    fail "$chk"
+    printf '%s\n' "$out" | head -10 | while read -r l; do detail "$l"; done
+  fi
+done
+
+# ------------------------------------------------------------------ 7. koni-docs
 if command -v npx >/dev/null 2>&1; then
   if out=$(npx --yes @koniverse/koni-docs validate --docs-path docs/ 2>&1); then
     pass "koni-docs validate"

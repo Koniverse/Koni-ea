@@ -80,6 +80,48 @@ per-version doc that it is a mechanical check rather than a performance claim.
 
 ---
 
+### F-7 — Five gate checks are configured but never fire
+
+| | |
+|---|---|
+| **Severity** | Medium |
+| **Opened** | 2026-08-02 (v0.3.6) |
+| **Area** | `.koni-harness/`, git hooks |
+| **Owner** | partly upstream — `Koniverse/Koni-Skills` |
+
+`install-gate.sh` writes a pre-commit hook hardcoded to `--phase work-commit`:
+
+```
+sh "$(git rev-parse --show-toplevel)/.koni-harness/gate-runner.sh" --phase work-commit || exit 1
+```
+
+Nothing in the repository ever invokes `--phase release-commit`. Every check assigned
+to that phase in `gates.conf` therefore **never runs automatically**: `story-lint`,
+`changelog-anchor`, `lesson-capture`, `design-first`, and `koni-docs-validate`.
+
+**How it went unnoticed**: they were run by hand before every commit during setup, so
+they appeared to work. A contributor who does not know to run them manually gets none
+of them — which is precisely the population a gate exists to protect. The failure is
+silent in the direction that always hides: it passes.
+
+**Partly closed in v0.3.6**:
+- `story-lint` and `changelog-anchor` moved into
+  [`scripts/verify.sh`](../../scripts/verify.sh), so CI runs them on every push and
+  pull request. Both are stateless — they read files, not the staged diff.
+- `koni-docs-validate` was already covered there.
+- The local `.git/hooks/pre-commit` now invokes both phases.
+
+**Still open**: `lesson-capture` and `design-first` inspect `git diff --cached`, which
+is empty in CI and meaningless outside a commit. They only work in a git hook — and
+hooks are not committed, so the fix above protects this machine and nobody else's.
+
+**To close**: `install-gate.sh` upstream in `Koni-Skills` should write a hook that
+runs both phases, or move the release-phase checks to `work-commit`. Until then, a
+fresh clone here has no `lesson-capture` or `design-first` enforcement even after
+running `install-gate.sh`.
+
+---
+
 ### F-5 — A vendored gate file carries a Vietnamese comment into this English repo
 
 | | |

@@ -314,3 +314,42 @@ it is actually a publishing decision wearing a lookup's clothes.
 - Note that a **commit author email** is the same exposure and cannot be fixed by
   editing a file — it is baked into every commit's metadata. Decide it before the
   first commit, not after.
+
+---
+
+## 9. Do not document a channel until you have opened it
+
+**What happened (v0.3.0 → v0.3.5)**: `SECURITY.md` shipped in v0.3.0 routing all
+vulnerability reports to `/security/advisories/new`. In v0.3.4 `CODE_OF_CONDUCT.md`
+was rewritten to route conduct reports there too, and every contact email was removed
+in favour of it. The URL returned **404** the entire time. It was written from
+knowing GitHub has such a form, never from opening one.
+
+Private vulnerability reporting is a **public-repository feature**; the repo was
+private. So for five versions the two documents that most need to work — the ones a
+person reads when something is wrong and they are already uncomfortable — pointed at
+nothing. The operator found it by clicking the link.
+
+**Why**: A documented channel is a **promise**, not a claim, and it fails differently.
+A wrong claim is discovered by anyone who checks it. A broken channel is discovered
+only by someone in trouble, at the worst possible moment, and their next move is
+usually to give up rather than to file a bug about the bug reporter.
+
+The API made it easy to miss: `PUT .../private-vulnerability-reporting` answered a
+bare `404`, which is indistinguishable from a wrong URL, a typo, or missing
+permissions. Nothing said "this feature does not exist for private repositories."
+**An absent feature and a broken one return the same status code.**
+
+**How to avoid**:
+- **Open every channel you document, before you document it.** Load the URL. If it
+  needs sign-in, load it signed in. A `200` behind a login redirect is fine; a `404`
+  is not.
+- Treat removing a fallback as raising the bar on what replaces it. Deleting the
+  contact email made the advisory form the *only* private path — that is the moment to
+  verify it, not after.
+- When an API returns `404` for an action you expected to work, ask whether the
+  feature exists **in this configuration** before assuming a bad request.
+- Put the channel check in the publication checklist, next to the credential scan.
+
+Sibling of §2 — that entry is about never reporting a verification you could not run;
+this one is about never shipping a promise you never exercised.
