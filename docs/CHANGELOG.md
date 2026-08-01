@@ -17,6 +17,37 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.3.2] — 2026-08-02 — the verification script actually runs now — v0.3.2
+
+The first CI run failed on a check that had passed locally every time. `verify.sh`
+promised "a green run here is a green run there" and was not delivering it.
+
+### Fixed
+- **The English-only check was a no-op on the author's machine.** It used `grep -lP`;
+  a shell function shadowing `grep` routed to a different implementation with
+  different flags, matched nothing, and reported success. Rewritten in `perl -CSD`,
+  which has identical regex and UTF-8 semantics on macOS and Linux. The check now
+  **fails loudly** when its interpreter is missing instead of passing quietly, and it
+  has been proven to catch Vietnamese text rather than merely assumed to.
+- **The character class was a blocklist and too broad.** It flagged
+  `Σ(open·vol)/Σvol` — mathematical notation — as non-English. Replaced with an
+  allowlist of the typography, math, arrow, box-drawing and emoji ranges this repo
+  legitimately uses. Every new exception is now a visible decision.
+- **The check is scoped to authored content.** `.koni-harness/` is vendored by
+  `install-gate.sh` and overwritten on every reinstall; its one Vietnamese comment is
+  upstream's to fix, and flagging it produced a failure no contributor here could act
+  on.
+- **The gitleaks job required a paid license.** `gitleaks-action` is licensed per
+  organization and failed with "missing gitleaks license"; this repo is
+  org-owned. The gitleaks **CLI** is MIT, so CI now installs a pinned binary and runs
+  it directly.
+
+Recorded as [LESSONS §7](LESSONS.md) — a check that depends on ambient tooling fails
+open, reporting success while doing nothing, and grows more trusted the longer it
+does so.
+
+---
+
 ## [0.3.1] — 2026-08-02 — repository renamed to `Koniverse/Koni-ea` — v0.3.1
 
 ### Changed

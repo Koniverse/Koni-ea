@@ -221,3 +221,58 @@ git diff docs/CONTEXT.md docs/LESSONS.md docs/CHANGELOG.md   # must be empty or 
 
 See [CONTEXT.md D5](CONTEXT.md). Sibling of §4 — that entry works out when the rule
 applies; this one is what happens when it applies and the tooling does not care.
+
+---
+
+## 7. A check that depends on ambient tooling verifies nothing
+
+**What happened (v0.3.1)**: `scripts/verify.sh` shipped with the promise printed in
+its own header — "CI runs exactly this script, so a green run here is a green run
+there." The first CI run failed on a check that had passed locally every time.
+
+The English-only check used `grep -lP`. On the author's machine the shell had a
+`grep` **function** shadowing the binary, routing to `ugrep` with different flags and
+different `.gitignore` semantics. It matched nothing and reported success. GitHub's
+runner has plain GNU grep, ran the real pattern, and found two files.
+
+Both findings were then interesting in their own right. One was a **false positive** —
+`Σ(open·vol)/Σvol` in `trading-mechanics.md`, mathematical notation the pattern had no
+business flagging. The other was **real** but not ours: a Vietnamese comment inside
+`.koni-harness/checks/design-first.sh`, a file vendored from Koni-Skills and
+overwritten on every gate reinstall.
+
+So the check was simultaneously not running, too broad, and pointed at a file the
+repo does not own.
+
+**Why**: `grep` on `PATH` is not one program. It is BSD grep, GNU grep, ugrep, a
+shell function, or a shim, and `-P` support, locale handling, and default excludes
+differ across all of them. A verification script that shells out to whatever `grep`
+resolves to is measuring the machine, not the repository. The failure mode is the
+worst kind: it fails **open**, reporting success while doing nothing, and the more
+often it passes the more confident everyone gets.
+
+`2>/dev/null` on the call made it silent. A tool that errors and a tool that finds
+nothing look identical when stderr is discarded.
+
+**How to avoid**:
+- **Never silence a checker's stderr.** If the tool cannot run, the check must fail
+  loudly, not pass quietly. `verify.sh` now fails outright when perl is missing.
+- **Pick the deterministic implementation, not the convenient one.** `perl -CSD` has
+  the same regex engine and the same UTF-8 semantics on macOS and Linux. `grep -P`
+  does not.
+- **Allowlist over blocklist** for character-class checks. Enumerating forbidden
+  scripts is endless and gets edge cases wrong; declaring what is permitted makes
+  every new exception a visible decision.
+- **Prove a check catches what it claims.** Run it against a file that should fail.
+  A check nobody has seen fail is a check nobody has seen work.
+- **Scope to authored content.** Vendored trees are upstream's to fix; including them
+  produces failures the contributor cannot act on.
+
+**Pattern**:
+```bash
+# prove it fails before trusting that it passes
+printf 'sentinel with the thing being forbidden\n' > /tmp/should-fail.md
+./scripts/verify.sh   # must report a failure naming /tmp/should-fail.md
+```
+
+See [CONTEXT.md D5](CONTEXT.md), [tests/findings.md](tests/findings.md).

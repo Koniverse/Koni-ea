@@ -31,14 +31,56 @@ echo
 
 # ---------------------------------------------------------------- 1. English only
 # This repository is English throughout: code, comments, docs, commit messages.
-# Em dashes and typographic quotes are fine; Vietnamese diacritics and CJK are not.
-found=$(tracked '*.md' '*.mq5' '*.mqh' '*.set' '*.yml' '*.yaml' '*.sh' \
-  | xargs grep -lP '[\x{0100}-\x{1EFF}\x{4E00}-\x{9FFF}\x{3040}-\x{30FF}\x{AC00}-\x{D7AF}]' 2>/dev/null)
-if [ -z "$found" ]; then
-  pass "English only"
+#
+# Allowlist, not blocklist. Enumerating forbidden scripts is endless and gets the
+# edge cases wrong — an early version flagged `Σ(open·vol)/Σvol` as non-English when
+# it is mathematical notation. Instead: declare the non-ASCII characters this repo
+# legitimately uses, and flag everything else for a human decision.
+#
+# Implemented in perl with -CSD (explicit UTF-8 I/O) rather than `grep -P`. The grep
+# on PATH is not the same program everywhere — a wrapper, BSD grep, or a non-UTF-8
+# locale each give a different answer, so this check silently passed on the author's
+# machine while failing in CI. See docs/LESSONS.md §7.
+#
+# .koni-harness/ is excluded: it is vendored from Koni-Skills by install-gate.sh, is
+# overwritten on every reinstall, and is not authored here. Its one Vietnamese
+# comment is upstream's to fix.
+if command -v perl >/dev/null 2>&1; then
+  found=$(tracked '*.md' '*.mq5' '*.mqh' '*.set' '*.yml' '*.yaml' '*.sh' \
+    | grep -v '^\.koni-harness/' \
+    | while read -r f; do
+        perl -CSD -ne '
+          # Allowed beyond ASCII: typography, math, arrows, symbols, box drawing,
+          # and the status emoji used in docs tables.
+          BEGIN { $ok = qr/[
+            \x{00A0}\x{00AB}\x{00BB}\x{00B0}\x{00B7}\x{00D7}\x{00F7}
+            \x{2010}-\x{2015}\x{2018}\x{2019}\x{201C}\x{201D}\x{2022}\x{2026}\x{2030}
+            \x{2039}\x{203A}\x{20AC}\x{00A7}\x{00B1}
+            \x{0391}-\x{03C9}
+            \x{2190}-\x{21FF}   # arrows
+            \x{2200}-\x{22FF}   # mathematical operators
+            \x{2300}-\x{23FF}   # miscellaneous technical (includes the clock glyphs)
+            \x{2500}-\x{257F}   # box drawing
+            \x{2580}-\x{259F}   # block elements
+            \x{25A0}-\x{25FF}   # geometric shapes
+            \x{2600}-\x{27BF}   # miscellaneous symbols + dingbats (check marks, warning)
+            \x{2B00}-\x{2BFF}   # arrows supplement
+            \x{1F300}-\x{1FAFF} # emoji
+            \x{FE0F}\x{200D}    # variation selector, zero-width joiner
+          ]/x }
+          if (my @bad = grep { $_ !~ $ok } (/([^\x00-\x7F])/g)) {
+            printf "%s:%d: %s\n", $ARGV, $., join(" ", map { sprintf "U+%04X(%s)", ord($_), $_ } @bad);
+          }
+        ' "$f"
+      done)
+  if [ -z "$found" ]; then
+    pass "English only"
+  else
+    fail "English only — unexpected non-ASCII in authored files"
+    printf '%s\n' "$found" | head -20 | while read -r l; do detail "$l"; done
+  fi
 else
-  fail "English only — non-English text in tracked files"
-  printf '%s\n' "$found" | while read -r f; do detail "$f"; done
+  fail "English only — perl not found, cannot run the check"
 fi
 
 # ------------------------------------------------------- 2. Internal links resolve

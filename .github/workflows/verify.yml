@@ -44,10 +44,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # gitleaks needs history to scan commits, not just the tree.
+          # gitleaks scans commits, not just the working tree.
           fetch-depth: 0
 
-      - name: Scan for secrets
-        uses: gitleaks/gitleaks-action@v2
+      # The gitleaks *CLI* is MIT and free. The gitleaks-action wrapper requires a
+      # paid license for repositories owned by an organization, which this one is —
+      # it failed with "missing gitleaks license" on the first CI run. Running the
+      # binary directly keeps the scan and drops the licensing problem.
+      - name: Install gitleaks
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_VERSION: 8.28.0
+        run: |
+          set -euo pipefail
+          curl -sSfL -o gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          tar -xzf gitleaks.tar.gz gitleaks
+          sudo install -m 0755 gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+
+      - name: Scan history for secrets
+        run: gitleaks git --no-banner --redact --verbose .
