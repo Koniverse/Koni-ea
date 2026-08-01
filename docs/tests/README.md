@@ -15,15 +15,16 @@ The verification surface for this repo. Standard: the `koni-qc` skill's
 
 ## The short version
 
-This repo has **no test code**. It ships markdown and MQL5 source, and the MQL5
-cannot be compiled on the development host — MetaEditor is Windows-only.
+This repo has **no test code**. It ships markdown and MQL5 source, and nothing here
+compiles it — that happens in Senti's Author Studio, on Senti's build host.
 
 Verification is therefore structural (links resolve, frontmatter is complete,
 version identity holds, no secrets leak) plus a hand-reviewed correctness checklist
 for every template contribution.
 
-The gap that matters — the template has never been compiled, run, or backtested —
-is tracked in [findings.md](findings.md) rather than papered over.
+The template **does** compile — 0 errors, 0 warnings in Senti Author Studio. What
+remains untested is running it and backtesting it, tracked in
+[findings.md](findings.md) rather than papered over.
 
 ## Directory layout
 

@@ -33,8 +33,14 @@ production `.ex5` it deploys from. The goal is a running instance whose identity
   metaeditor64.exe /compile:"MY_STRATEGY_v1.00.mq5" /log:"compile.log"
   ```
 
-  Then parse `compile.log` for `0 errors`. **MetaEditor is Windows-only** — on macOS
-  or Linux this step needs a Windows VM or Wine; there is no native alternative.
+  Then parse `compile.log` for `0 errors`. MetaEditor is Windows-only, so this route
+  needs a Windows host.
+
+- **Senti (what a partner actually does)**: paste the `.mq5` into **Author Studio** and
+  press **Compile**. Senti runs its safety scan and a headless MetaEditor compile on
+  its own build host, then **Save as EA** registers a private EA plus a preset built
+  from the source's `input` defaults. No local compiler, no binary, no `.set` file, no
+  Windows machine. This is the path to document for anyone outside the Koniverse team.
 
 ## Deploy to a terminal
 

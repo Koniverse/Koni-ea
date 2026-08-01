@@ -7,13 +7,13 @@ Epic-level test specifications, one file per epic: `EPIC-N.md`.
 **Empty.** No epic has test cases yet.
 
 That is a deliberate position rather than an oversight. [EPIC-1](../../sprints/epics/EPIC-1.md)
-delivered documentation, a skill set, and MQL5 source that this repo cannot execute
-— MetaEditor is Windows-only. Writing test cases before there is any way to run them
-produces a document that looks like coverage and provides none.
+delivered documentation, a skill set, and MQL5 source that this repo cannot execute —
+compiling and running both happen on Senti. Writing test cases before there is any way
+to run them produces a document that looks like coverage and provides none.
 
-The verification EPIC-1 *did* get is structural and is recorded in
-[STRATEGY.md](../STRATEGY.md); the executable gap is tracked as
-[F-1 through F-3](../findings.md).
+The verification EPIC-1 *did* get is structural, plus a clean compile in Senti
+Author Studio; it is recorded in [STRATEGY.md](../STRATEGY.md). The remaining
+executable gap is tracked as [F-2 and F-3](../findings.md).
 
 ## When to write a file here
 

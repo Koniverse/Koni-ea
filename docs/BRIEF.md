@@ -80,8 +80,13 @@ top of this brief stop appearing in partner bots.
 
 ## Constraints
 
-- **MetaEditor is Windows-only.** Compiling requires Windows, a VM, or Wine. This
-  is MetaQuotes' constraint, not something this repo can remove.
+- **The consumer needs no build toolchain.** Senti's Author Studio compiles pasted
+  `.mq5` source on its own host, so a partner needs a browser and a Senti account —
+  not MetaEditor, not a Windows machine. A local MetaTrader is optional and useful
+  only for running the Strategy Tester.
+- **Senti's safety scan constrains the code.** No `#import`, no `WebRequest`, no
+  destructive file calls, no `SendFTP` — refused before compiling. Templates and
+  guidance here must stay inside that boundary.
 - **The repo is public and MIT-licensed.** No proprietary strategy logic, no
   credentials, no third-party EA source can be committed — anything merged is
   redistributable by anyone, forever.

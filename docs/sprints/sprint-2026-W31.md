@@ -45,6 +45,19 @@ One thing was deliberately **not** verified: the template's MQL5 compile.
 MetaEditor is Windows-only and this ran on macOS. It is recorded as an open gap in
 `AGENTS.md` and [LESSONS §2](../LESSONS.md) rather than claimed.
 
+## Post-sprint follow-ups
+
+The sprint closed at v0.3.0. Versions 0.3.1 through 0.6.0 were corrections and
+hardening carried out after close, each committed with its own decision or lesson
+rather than reopening the sprint: the org rename (D5), the gate-phase gap (F-7), the
+skills' portability outside Koniverse, the Senti-runtime framing (LESSONS §11), and
+the Author Studio correction (LESSONS §12).
+
+Lessons: none new — the final documentation sweep applied §11 (a decision is not
+applied until a sweep proves it) and §12 (read the product's UI, not only its
+architecture docs). Both were written from the changes that caused this sweep; a
+third entry restating them would be filler, and the depth bar exists to prevent that.
+
 ## Carry-over
 
 None — every committed story closed.

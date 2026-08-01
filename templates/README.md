@@ -8,13 +8,14 @@ strategy stub for you to replace.
 
 | Template | Platform | Deploys to Senti | Start here |
 |---|---|---|---|
-| [`mql5/STARTER_EA/`](mql5/STARTER_EA/) | MetaTrader 5 (MQL5) | ✅ yes — upload `.ex5` + `.set` | [README](mql5/STARTER_EA/README.md) |
+| [`mql5/STARTER_EA/`](mql5/STARTER_EA/) | MetaTrader 5 (MQL5) | ✅ yes — paste the `.mq5` into Author Studio; Senti compiles | [README](mql5/STARTER_EA/README.md) |
 
 ## Why only MQL5
 
-Senti executes on **real MetaTrader 5 accounts at licensed brokers**. The upload
-path it accepts today is a compiled `.ex5` plus its `.set` preset, so MQL5 is the
-one language with a working route from your editor to a live Senti deployment.
+Senti executes on **real MetaTrader 5 accounts at licensed brokers**, and its Author
+Studio compiles pasted `.mq5` source directly. MQL5 is the one language with a working
+route from your editor to a live deployment — and you never leave the browser to take
+it.
 
 Templates for other runtimes will land here when Senti opens a path for them. An
 empty directory promising a template that does not exist is worse than no

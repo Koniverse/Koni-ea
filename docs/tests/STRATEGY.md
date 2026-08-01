@@ -6,9 +6,9 @@
 and no runtime of its own. There is no test suite here, and adding one would be
 theatre.
 
-That is not the same as having nothing to verify. It means verification is
-**structural and documentary** — and that the one thing most worth executing,
-compiling and running the MQL5, cannot happen on this repo's development host.
+That is not the same as having nothing to verify. It means verification here is
+**structural and documentary** — compiling and running the MQL5 happen on Senti, not
+in this repository or its CI.
 
 Stating that plainly is the point of this document. A test strategy that invents a
 framework nobody runs is worse than one that names where the real gap is.
@@ -20,8 +20,8 @@ Ranked by what actually costs someone money:
 | Risk | Severity | Where it is caught |
 |---|---|---|
 | A partner ships a bot with a chassis bug the template was supposed to prevent | **Critical** — real money | koni-ea-dev pitfall checklist, applied per contribution |
-| The template itself contains a chassis bug | **Critical** — multiplied across every copy | Structural self-check + Windows compile + backtest (**gap**) |
-| The template does not compile | High — blocks every user at step one | MetaEditor F7 (**gap — Windows-only**) |
+| The template itself contains a chassis bug | **Critical** — multiplied across every copy | Structural self-check + compile (✅ done) + a live run and backtest (**gap**) |
+| The template does not compile | High — blocks every user at step one | Senti Author Studio **Compile** — ✅ verified 0E/0W, [F-1 closed](findings.md) |
 | A doc tells a partner to do something wrong | High — propagates silently | Link resolution, doc review, `koni-docs validate` |
 | Secrets or proprietary strategy IP leak into a public repo | High — irreversible once public | Credential scan, gate `credential-scan`, CONTRIBUTING bar |
 | A broken internal link or stale reference | Medium — erodes trust, cheap to fix | Link-resolution sweep, `koni-docs validate` |
@@ -86,13 +86,15 @@ Recorded rather than quietly carried. Status tracked in [findings.md](findings.m
 
 | Gap | Why it exists | What would close it |
 |---|---|---|
-| **The template has never been compiled** | MetaEditor is Windows-only; dev host is macOS | One MetaEditor F7 on a Windows host |
-| **The template has never been run** | Same | Attach to a demo chart; confirm the `[INIT]` Journal line and that filters log as designed |
-| **No release backtest** | Depends on the compile | "Every Tick Based on Real Ticks", ≥3 months, report into `backtest/` |
-| **No automated link checking** | Manual sweep only | A CI job — deferred until the repo is public and CI is warranted |
+| **The template has never been run** | Nobody has deployed it | Attach on a demo account; confirm the `[INIT]` Journal line and that filters log as designed |
+| **No release backtest** | Nobody has run one | "Every Tick Based on Real Ticks", ≥ 3 months, report into `backtest/` |
 
-The first three are one Windows session. Until then the template is *reviewed*
-correct, not *verified* correct, and every document mentioning it says so.
+**Closed**: the template now compiles — 0 errors, 0 warnings in Senti Author Studio
+([F-1](findings.md)) — and link checking is automated ([F-4](findings.md)).
+
+The two remaining gaps are one session on a demo account. Until then the template is
+*compiled and reviewed* correct, not *run* correct, and every document mentioning it
+says so.
 
 ## Where artifacts live
 

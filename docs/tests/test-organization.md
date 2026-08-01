@@ -61,11 +61,13 @@ commands; summarized here by what they cover:
 | Layer | Covers | Automated? |
 |---|---|---|
 | koni-harness gate | Version/changelog coupling, secrets, story frontmatter, doc references | Yes — every commit |
-| Link resolution sweep | Every internal markdown link | Manual command |
-| Template self-consistency | Version identity, handle create/release parity, no bar `[0]` reads | Manual command |
+| Link resolution sweep | Every internal markdown link | Yes — `scripts/verify.sh`, in CI |
+| Template self-consistency | Version identity, handle create/release parity, no bar `[0]` reads | Yes — `scripts/verify.sh`, in CI |
 | Correctness checklist | The 12 MQL5 bug classes | Manual review per contribution |
-| MetaEditor compile | Syntax, types, scope | **Not run — Windows-only** |
-| Strategy Tester backtest | Runtime behaviour over history | **Not run — depends on compile** |
+| Senti safety scan | `#import`, `WebRequest`, destructive file calls, `SendFTP` | Yes — Senti, before every compile |
+| Senti compile | Syntax, types, scope | ✅ run — 0E/0W in Author Studio ([F-1](findings.md)) |
+| Live run on a demo account | Runtime behaviour, Journal output, restart recovery | **Not run** — [F-2](findings.md) |
+| Strategy Tester backtest | Behaviour over history | **Not run** — [F-3](findings.md) |
 
 The last two rows are the honest gap. They are tracked in
 [findings.md](findings.md), not silently omitted.
