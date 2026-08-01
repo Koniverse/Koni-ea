@@ -6,7 +6,7 @@
 
 Report it privately through
 [GitHub Security Advisories](https://github.com/Koniverse/Koni-ea/security/advisories/new),
-or by email to **duongmai0208@gmail.com** with `[SECURITY]` in the subject.
+or by email to **partners@koni.studio** with `[SECURITY]` in the subject.
 
 Include what you found, how to reproduce it, and what an attacker gains. A proof of
 concept helps; a working exploit against someone else's account does not — do not

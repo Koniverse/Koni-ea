@@ -276,3 +276,39 @@ printf 'sentinel with the thing being forbidden\n' > /tmp/should-fail.md
 ```
 
 See [CONTEXT.md D5](CONTEXT.md), [tests/findings.md](tests/findings.md).
+
+---
+
+## 8. Context an agent is given is not content it may publish
+
+**What happened (v0.3.3)**: `CODE_OF_CONDUCT.md` and `SECURITY.md` both need a contact
+address for private reports. The working session carried the operator's email in its
+ambient context, so that address went into both files as the project's public contact
+point. Nobody asked for it and nobody was asked about it. The operator caught it on
+review: the right address was an organizational one, `partners@koni.studio`.
+
+**Why**: The failure is subtle because the information was not *wrong* and not
+*obtained improperly* — it was correct, it was already there, and it filled a real
+blank. What made it a mistake is the **change of audience**. Knowing an operator's
+personal email so you can reason about a repository is one thing. Printing it in a
+file that a public MIT-licensed repository serves to everyone, forever, as the
+designated channel for security reports and conduct complaints is another act
+entirely, and it is theirs to authorize.
+
+Ambient context is dangerous precisely because it feels like established fact rather
+than a decision. A blank field plus a plausible value in context reads as a lookup;
+it is actually a publishing decision wearing a lookup's clothes.
+
+**How to avoid**:
+- **Personal identifiers are never a default.** Email, real name, phone, home
+  directory paths, machine names, internal URLs. If a public-facing file needs one,
+  ask — a one-line question costs less than a Git history.
+- **Ask what the field is for, not what would fill it.** "Who should receive security
+  reports for this project" has an organizational answer; "what email do I know"
+  has a personal one, and only the first is the actual question.
+- **Sweep before publishing.** `git ls-files | xargs grep -E '[a-z0-9._%+-]+@[a-z0-9.-]+'`
+  over the tree catches this class in seconds, and it belongs in the pre-public
+  checklist next to the credential scan.
+- Note that a **commit author email** is the same exposure and cannot be fixed by
+  editing a file — it is baked into every commit's metadata. Decide it before the
+  first commit, not after.

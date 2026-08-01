@@ -17,6 +17,27 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.3.3] — 2026-08-02 — the public contact address is organizational, not personal — v0.3.3
+
+### Fixed
+- **`CODE_OF_CONDUCT.md` and `SECURITY.md` listed the operator's personal email** as
+  the project's contact point for conduct complaints and private security reports.
+  The address came from the working session's ambient context and was never
+  authorized for publication. Replaced with **partners@koni.studio**.
+
+Recorded as [LESSONS §8](LESSONS.md) — context an agent is given is not content it may
+publish. The value was correct and already at hand, which is exactly what made it read
+as a lookup rather than as the publishing decision it was.
+
+### Known gap
+- **Commit author metadata still carries a personal email.** All commits to date were
+  authored as `jindo9986@gmail.com`. Editing a file cannot change this; it lives in
+  each commit object. Changing it for existing commits means rewriting history, which
+  would invalidate every SHA recorded under RULE-2 in the story files and CHANGELOG.
+  Left for an explicit decision rather than actioned unilaterally.
+
+---
+
 ## [0.3.2] — 2026-08-02 — the verification script actually runs now — v0.3.2
 
 The first CI run failed on a check that had passed locally every time. `verify.sh`
