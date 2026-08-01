@@ -1,0 +1,42 @@
+; STARTER_EA v1.00 — default preset
+; Load in MT5:  Inputs tab -> Load  -> pick this file
+; Upload to Senti alongside the compiled .ex5.
+;
+; CHANGE InpMagicNumber before you run this. It must be unique per running
+; instance — MT5 does not enforce uniqueness, and two instances sharing a magic
+; will silently manage each other's positions.
+
+; ==== General ====
+InpMagicNumber=990001
+InpTradeComment=STARTER_EA
+
+; ==== Signal (placeholder — replace with your own) ====
+InpFastPeriod=12
+InpSlowPeriod=26
+
+; ==== Position Sizing ====
+InpUseRiskPercent=true
+InpRiskPercent=1.0
+InpFixedLot=0.01
+
+; ==== Stop Loss / Take Profit ====
+InpAtrPeriod=14
+InpAtrSLMult=2.0
+InpRR=1.5
+
+; ==== Risk Management ====
+InpMaxPositions=1
+InpEquityBreakerPct=20.0
+InpResetBreaker=false
+InpDailyLossLimitPct=5.0
+InpCooldownBars=3
+
+; ==== Operational Filters ====
+InpMaxSpreadPoints=30
+InpMaxGapPoints=200
+InpUseSessionFilter=false
+InpSessionStartHourUtc=7
+InpSessionEndHourUtc=20
+
+; ==== Execution ====
+InpSlippagePoints=10

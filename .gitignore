@@ -1,0 +1,51 @@
+# deps / build
+node_modules/
+dist/
+.next/
+build/
+
+# secrets / env
+.env
+.env.local
+.env.*.local
+
+# per-developer running snapshot (Active Context Pattern B)
+.active-context.md
+
+# BMAD scratch output
+_bmad-output/
+
+# agent worktrees
+.claude/worktrees/
+
+# Consumed toolchain — restored per-machine, never redistributed.
+# These hold ~500 vendored BMAD skill files plus symlinks into a sibling
+# Koni-Skills checkout: this repo's dev tooling, not its product. Committing
+# them would republish third-party skill content under our LICENSE and bury
+# skills/ + templates/ (the ~20 files that matter) in noise.
+# Restore with the commands in docs/SETUP.md §6.
+.claude/skills/
+.agents/skills/
+
+# skills workspace
+*-workspace/
+
+# OS
+.DS_Store
+
+# MQL5 / MetaTrader build + runtime artifacts
+*.ex5
+*.ex4
+*.log
+MQL5/Logs/
+MQL5/Files/
+
+# Python bot templates
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+# >>> koni-harness >>>
+.koni-harness/loop-state
+.koni-harness/worktrees/
+# <<< koni-harness <<<
