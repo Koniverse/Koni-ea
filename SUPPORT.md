@@ -14,10 +14,10 @@ Start with the docs — most questions are answered there, faster than a round t
 
 ## Still stuck
 
-**Open a [Discussion](https://github.com/Koniverse/koni-ea/discussions)** for
+**Open a [Discussion](https://github.com/Koniverse/Koni-ea/discussions)** for
 questions, ideas, and "is this the right approach" conversations.
 
-**Open an [Issue](https://github.com/Koniverse/koni-ea/issues)** when something in
+**Open an [Issue](https://github.com/Koniverse/Koni-ea/issues)** when something in
 this repository is wrong: a broken template, an incorrect instruction, a dead link.
 
 **Report security problems privately** — see [SECURITY.md](SECURITY.md). Do not open

@@ -17,6 +17,22 @@ All notable changes to **koni-ea** are recorded here. Format follows
 
 ---
 
+## [0.3.1] — 2026-08-02 — repository renamed to `Koniverse/Koni-ea` — v0.3.1
+
+### Changed
+- Every documented `git clone` and `npx skills add` path updated to the canonical
+  `Koniverse/Koni-ea`, across README, CONTRIBUTING, SUPPORT, SECURITY, SETUP,
+  AGENTS.md, the template README, and the `.github/` templates. The git remote was
+  re-pointed.
+
+### Deliberately not changed
+- **The two quoted commands inside committed decision entries D1 and D4.** They are
+  append-only history and now read as they did when written. GitHub's rename
+  redirect keeps them working. See [D5](CONTEXT.md) — a working-tree `sed` had
+  already rewritten them and was reverted on diff review.
+
+---
+
 ## [0.3.0] — 2026-08-02 — open-source standard: community health files, CI, English everywhere — v0.3.0
 
 Brings the repository up to what a contributor expects from a credible open-source

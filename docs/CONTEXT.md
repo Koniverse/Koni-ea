@@ -185,3 +185,44 @@ Koniverse repos are not retroactively translated — this decision binds new wor
 **Date**: 2026-08-02
 **Version**: 0.3.0
 **Reference**: [D2](#d2-the-repo-goes-public--scope-narrows-to-mql5-and-the-toolchain-leaves-git), `skills/koni-ea-ops/references/documentation.md`, [scripts/verify.sh](../scripts/verify.sh).
+
+---
+
+### D5. The repo is `Koniverse/Koni-ea` — and D1/D4 keep the old casing on purpose
+
+**Context**: The repository was renamed from `Koniverse/koni-ea` to
+`Koniverse/Koni-ea`. GitHub redirects the old path, so nothing breaks, but every
+documented `git clone` and `npx skills add` command in the repo named a path that is
+no longer canonical.
+
+Two of those references sit inside **committed** decision entries: D1 quotes
+`npx skills add Koniverse/koni-ea --skill koni-ea-dev` in its rationale, and D4
+quotes the same command for `koni-ea-ops`.
+
+**Decision**: Update every operational reference — README, CONTRIBUTING, SUPPORT,
+SECURITY, SETUP, AGENTS.md, the template README, the `.github/` templates, and the
+git remote. **Leave the two quotes inside D1 and D4 exactly as written**, and record
+the rename here instead.
+
+**Rationale**: This is the same question [D4's sibling lesson](LESSONS.md) settled
+one commit earlier, arriving from the other direction. When those URLs were
+uncommitted drafts, correcting them in place was right — nothing had been published,
+so there was no record to protect. They are committed now. A reader of D1 should see
+what D1 actually said when the decision was made, not a tidied version that implies
+the author knew about a rename that had not happened yet.
+
+The cost of leaving them is one stale command in two historical entries, next to a
+pointer explaining why. The cost of editing them is that every future reader has to
+wonder which parts of the decision log were quietly revised. That trade is not close.
+
+A sed across the working tree does not know about this distinction, which is exactly
+how the edit nearly landed — it was caught by reviewing the diff before committing,
+not by the rule being remembered in advance.
+
+**Impact**: 13 files updated; `git remote set-url origin` re-pointed. D1 and D4 are
+untouched; the commands quoted in them resolve through GitHub's rename redirect and
+are correct in substance, only stale in casing.
+
+**Date**: 2026-08-02
+**Version**: 0.3.1
+**Reference**: [D1](#d1-the-ea-skills-live-here-not-in-koni-skills--and-there-is-only-one-copy), [D4](#d4-english-everywhere-enforced--the-vietnamese-carve-out-does-not-survive-going-public), [LESSONS §4](LESSONS.md).

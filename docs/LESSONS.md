@@ -173,3 +173,51 @@ source, `<pre>` in HTML, quoted text in a config file. If your parser cannot tel
   content. Both "broken links" here pointed at paths no human would ever write.
 
 See [US-1.4](sprints/stories/US-1.4-open-source-standard.md).
+
+---
+
+## 6. A bulk find-and-replace does not know which files are append-only
+
+**What happened (v0.3.1)**: The repository was renamed, so a one-line `sed` swept the
+working tree replacing the old path with the new one across thirteen files. It
+worked. It also rewrote two quoted commands inside `docs/CONTEXT.md` decision entries
+D1 and D4 — entries that had been **committed one commit earlier** and are
+append-only by RULE-7. The edit was caught by reading `git diff` before committing,
+reverted, and replaced with a new entry (D5) recording the rename.
+
+Nothing was lost. But the rule had been written down, enforced, and taught in
+[§4](#4-append-only-protects-committed-history-not-uncommitted-drafts) that same day,
+and it still nearly went in.
+
+**Why**: The rule lives in a document; the operation is a regex over a file glob. A
+`sed -i` has no model of "this file is a historical record and that one is current
+state" — it sees bytes matching a pattern. Every append-only guarantee in a repo is
+enforced by a human deciding not to edit something, which means any tool that edits
+in bulk routes straight around it.
+
+The near-miss is also *why* it happened: the correct move on those same strings, one
+commit earlier, had been to edit them in place, because they were uncommitted drafts.
+The right action changed the moment the commit landed, and muscle memory did not.
+
+**How to avoid**:
+- Exclude append-only files from bulk edits by default:
+  `--exclude=CONTEXT.md --exclude=LESSONS.md --exclude=CHANGELOG.md`, then handle
+  them deliberately.
+- Read `git diff` on the append-only files specifically before staging. Not the
+  summary — the actual hunks.
+- When a rename or refactor changes strings that appear in history, the history entry
+  gets a **pointer**, not an edit. Stale text plus an explanation beats revised text
+  with no signal that it was revised.
+
+**Pattern**:
+```bash
+# sweep everything except the record
+grep -rl 'old-string' . --exclude-dir=.git \
+  --exclude=CONTEXT.md --exclude=LESSONS.md --exclude=CHANGELOG.md \
+  | xargs sed -i '' 's|old-string|new-string|g'
+
+git diff docs/CONTEXT.md docs/LESSONS.md docs/CHANGELOG.md   # must be empty or intentional
+```
+
+See [CONTEXT.md D5](CONTEXT.md). Sibling of §4 — that entry works out when the rule
+applies; this one is what happens when it applies and the tooling does not care.

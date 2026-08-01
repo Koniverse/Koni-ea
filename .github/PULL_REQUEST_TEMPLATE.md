@@ -50,7 +50,7 @@ A change to a released template is a **new version**, not an edit in place. Crea
 - [ ] Compiles with zero errors **and** zero warnings
 
 The reasoning behind each line is in
-[`mql5-pitfalls.md`](https://github.com/Koniverse/koni-ea/blob/main/skills/koni-ea-dev/references/mql5-pitfalls.md).
+[`mql5-pitfalls.md`](https://github.com/Koniverse/Koni-ea/blob/main/skills/koni-ea-dev/references/mql5-pitfalls.md).
 
 ## Verification
 

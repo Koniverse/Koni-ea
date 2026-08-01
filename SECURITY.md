@@ -5,7 +5,7 @@
 **Do not open a public issue for a security problem.**
 
 Report it privately through
-[GitHub Security Advisories](https://github.com/Koniverse/koni-ea/security/advisories/new),
+[GitHub Security Advisories](https://github.com/Koniverse/Koni-ea/security/advisories/new),
 or by email to **duongmai0208@gmail.com** with `[SECURITY]` in the subject.
 
 Include what you found, how to reproduce it, and what an attacker gains. A proof of

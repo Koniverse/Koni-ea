@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Question or idea
-    url: https://github.com/Koniverse/koni-ea/discussions
+    url: https://github.com/Koniverse/Koni-ea/discussions
     about: Ask how something works, or float an idea before it becomes a proposal.
   - name: Report a security vulnerability
-    url: https://github.com/Koniverse/koni-ea/security/advisories/new
+    url: https://github.com/Koniverse/Koni-ea/security/advisories/new
     about: Private disclosure. Never open a public issue for a security problem.
   - name: Getting help
-    url: https://github.com/Koniverse/koni-ea/blob/main/SUPPORT.md
+    url: https://github.com/Koniverse/Koni-ea/blob/main/SUPPORT.md
     about: Troubleshooting, setup problems, and what this project does not cover.

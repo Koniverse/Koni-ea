@@ -18,7 +18,7 @@ version_shipped: 0.1.0
 ## Goal
 
 Make `koni-ea` the single source of truth for the two EA domain skills, so that a
-consumer running `npx skills add Koniverse/koni-ea --skill koni-ea-dev` gets a real
+consumer running `npx skills add Koniverse/Koni-ea --skill koni-ea-dev` gets a real
 skill and there is no second copy anywhere to drift from it.
 
 ## Background
@@ -133,7 +133,7 @@ the delete safe and bounded the re-point work to four links.
 original still existed is the only ordering where the check means anything.
 
 A later change moved the repo from a personal account to the `Koniverse` org. The
-`Koniverse/koni-ea` URLs in D1 and D42 were corrected directly rather than via a
+`Koniverse/Koni-ea` URLs in D1 and D42 were corrected directly rather than via a
 revision entry, because neither had been committed yet — append-only protects
 committed history, and both were still drafts.
 

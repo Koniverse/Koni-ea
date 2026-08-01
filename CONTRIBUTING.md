@@ -7,7 +7,7 @@ and template is something a partner will run against a real trading account, so
 ## Before you start
 
 ```bash
-git clone https://github.com/Koniverse/koni-ea.git
+git clone https://github.com/Koniverse/Koni-ea.git
 cd koni-ea
 cp .active-context.example.md .active-context.md   # fill in your local details
 ```

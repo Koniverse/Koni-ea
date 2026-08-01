@@ -1,7 +1,7 @@
 # STARTER_EA — MQL5 bot template
 
 The reference skeleton for a MetaTrader 5 Expert Advisor you can deploy on
-[Senti](https://github.com/Koniverse/koni-ea#what-senti-expects). Copy it, replace
+[Senti](https://github.com/Koniverse/Koni-ea#what-senti-expects). Copy it, replace
 one function, ship.
 
 > **This is a structure, not a strategy.** Every lifecycle, risk and safety

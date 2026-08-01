@@ -178,9 +178,9 @@ checkout, plus the BMAD pack (46 `bmad-*` skills) from `npx bmad-method install`
 ## How consumers install
 
 ```bash
-npx skills add Koniverse/koni-ea --list                     # browse
-npx skills add Koniverse/koni-ea --skill koni-ea-dev        # one skill
-npx skills add Koniverse/koni-ea --skill '*' --agent '*'    # everything
+npx skills add Koniverse/Koni-ea --list                     # browse
+npx skills add Koniverse/Koni-ea --skill koni-ea-dev        # one skill
+npx skills add Koniverse/Koni-ea --skill '*' --agent '*'    # everything
 npx skills experimental_install                             # restore from lockfile
 ```
 

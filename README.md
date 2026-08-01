@@ -3,7 +3,7 @@
 **Build a MetaTrader 5 trading bot and deploy it on Senti — starting from a
 template that already gets the hard parts right.**
 
-[![verify](https://github.com/Koniverse/koni-ea/actions/workflows/verify.yml/badge.svg)](https://github.com/Koniverse/koni-ea/actions/workflows/verify.yml)
+[![verify](https://github.com/Koniverse/Koni-ea/actions/workflows/verify.yml/badge.svg)](https://github.com/Koniverse/Koni-ea/actions/workflows/verify.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![MetaTrader 5](https://img.shields.io/badge/platform-MetaTrader%205-0a0a0a.svg)](https://www.metatrader5.com/)
@@ -20,7 +20,7 @@ Two things ship from this repo:
 ## Quick start
 
 ```bash
-git clone https://github.com/Koniverse/koni-ea.git
+git clone https://github.com/Koniverse/Koni-ea.git
 cp -r koni-ea/templates/mql5/STARTER_EA  my-bot
 ```
 
@@ -81,9 +81,9 @@ Each of those is a specific production bug documented in
 Install into your own project so your AI assistant applies the standard as it works:
 
 ```bash
-npx skills add Koniverse/koni-ea --list                  # browse
-npx skills add Koniverse/koni-ea --skill koni-ea-dev     # install one
-npx skills add Koniverse/koni-ea --skill '*' --agent '*' # install all, all agents
+npx skills add Koniverse/Koni-ea --list                  # browse
+npx skills add Koniverse/Koni-ea --skill koni-ea-dev     # install one
+npx skills add Koniverse/Koni-ea --skill '*' --agent '*' # install all, all agents
 ```
 
 | Skill | What it does |

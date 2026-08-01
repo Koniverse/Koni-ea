@@ -25,7 +25,7 @@ repo is markdown and MQL5 source.
 ## 2. Get the template
 
 ```bash
-git clone https://github.com/Koniverse/koni-ea.git
+git clone https://github.com/Koniverse/Koni-ea.git
 cd koni-ea
 cp -r templates/mql5/STARTER_EA  ~/my-bot
 ```
@@ -72,7 +72,7 @@ it writes:
 
 ```bash
 cd ~/my-bot
-npx skills add Koniverse/koni-ea --skill koni-ea-dev --skill koni-ea-ops
+npx skills add Koniverse/Koni-ea --skill koni-ea-dev --skill koni-ea-ops
 ```
 
 Then ask it to build the strategy. It will pull in the MQL5 standard and the
@@ -143,7 +143,7 @@ is confirming your edits did not reintroduce one.
 Only needed if you are changing this repo, not if you are using it.
 
 ```bash
-git clone https://github.com/Koniverse/koni-ea.git
+git clone https://github.com/Koniverse/Koni-ea.git
 cd koni-ea
 cp .active-context.example.md .active-context.md   # gitignored; fill in your details
 ```

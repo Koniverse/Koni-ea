@@ -9,7 +9,7 @@ body:
 
         **Security problems do not belong here.** If the bug lets someone lose money
         or expose credentials, report it privately — see
-        [SECURITY.md](https://github.com/Koniverse/koni-ea/blob/main/SECURITY.md).
+        [SECURITY.md](https://github.com/Koniverse/Koni-ea/blob/main/SECURITY.md).
 
         **Strategy performance is not a bug.** The shipped templates are structural
         skeletons with deliberately naive signals and no edge. That is documented and
